@@ -1,4 +1,4 @@
-Table users {
+Table users { 
   id integer [primary key]
   username varchar
   email varchar
