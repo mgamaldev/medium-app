@@ -1,0 +1,94 @@
+Table users {
+  id integer [primary key]
+  username varchar
+  email varchar
+  password varchar
+  role varchar
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table articles {
+  id integer [primary key] 
+  user_id integer
+  title varchar
+  body text 
+  status varchar
+  created_at timestamp
+}
+
+Table tags {
+  id integer [primary key]
+  name varchar 
+  slug varchar
+  created_at timestamp
+}
+
+Table likes {
+  id integer [primary key]
+  user_id integer 
+  article_id integer 
+  created_at timestamp
+}
+
+Table comments {
+  id integer [primary key]
+  user_id integer 
+  article_id integer 
+  body varchar
+  created_at timestamp
+}
+
+
+
+Table reading_lists {
+  id integer [primary key]
+  user_id integer [unique]
+  title string
+}
+
+Table article_tag {
+  id integer [primary key]
+  article_id integer 
+  tag_id integer 
+
+}
+
+Table user_follower {
+  id integer [primary key]
+  user_id integer
+  follower_id integer 
+  created_at timestamp
+
+} 
+
+Table article_reading_list {
+  id integer [primary key]
+  article_id integer 
+  reading_list_id integer 
+}
+
+//likes
+Ref: likes.user_id > users.id 
+Ref: likes.article_id > articles.id
+
+//comments
+Ref: comments.user_id > users.id
+Ref: comments.article_id > articles.id
+
+//article
+Ref: articles.user_id > users.id
+
+//article_tag
+Ref: article_tag.article_id > articles.id
+Ref: article_tag.tag_id > tags.id
+//user_follower
+Ref: user_follower.user_id > users.id
+Ref: user_follower.follower_id > users.id
+
+//article_reading_list
+Ref: article_reading_list.article_id > articles.id 
+Ref: article_reading_list.reading_list_id > reading_lists.id
+
+//reading_lists
+Ref: reading_lists.user_id - users.id
