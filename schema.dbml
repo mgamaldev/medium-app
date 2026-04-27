@@ -30,6 +30,10 @@ Table likes {
   user_id integer 
   article_id integer 
   created_at timestamp
+
+  indexes {
+    (user_id, follower_id) [unique]
+  }
 }
 
 Table comments {
@@ -38,12 +42,14 @@ Table comments {
   article_id integer 
   body text
   created_at timestamp
+  updated_at timestamp
 }
 
 Table reading_lists {
   id integer [primary key]
   user_id integer
   title varchar
+  created_at timestamp
 }
 
 Table article_tag {
