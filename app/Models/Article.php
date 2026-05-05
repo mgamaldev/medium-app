@@ -56,15 +56,5 @@ class Article extends Model
         return $this->belongsToMany(ReadingList::class);
     }
 
-    public function scopePublished($query)
-    {
-        return $query->where('status', ArticleStatus::PUBLISHED);
-    }
-
-    public function scopeTrending($query)
-    {
-        return $query->orderBy('created_at', 'desc');
-    }
-
     
 }
