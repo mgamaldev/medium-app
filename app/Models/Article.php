@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Builders\ArticleQueryBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\User;
@@ -10,10 +11,17 @@ use App\Models\Comment;
 use App\Models\Like;
 use App\Models\ReadingList;
 use App\Enums\ArticleStatus;
+use Override;
 
 class Article extends Model
 {
     use HasFactory;
+
+    #[Override]
+    public function newEloquentBuilder($query): ArticleQueryBuilder
+    {
+        return new ArticleQueryBuilder($query);
+    }
 
     protected $fillable = ['title','body','status'];
 
@@ -46,16 +54,6 @@ class Article extends Model
     public function readingLists()
     {
         return $this->belongsToMany(ReadingList::class);
-    }
-
-    public function scopePublished($query)
-    {
-        return $query->where('status', ArticleStatus::PUBLISHED);
-    }
-
-    public function scopeTrending($query)
-    {
-        return $query->orderBy('created_at', 'desc');
     }
 
     
