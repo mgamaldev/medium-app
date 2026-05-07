@@ -23,7 +23,7 @@ class Article extends Model
         return new ArticleQueryBuilder($query);
     }
 
-    protected $fillable = ['title','body','status'];
+    protected $fillable = ['title','body','status','published_at'];
 
     protected function casts(): array
     {
