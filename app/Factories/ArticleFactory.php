@@ -3,6 +3,8 @@
 namespace App\Factories;
 
 use App\Enums\ArticleStatus;
+use App\Exceptions\ArticleTypeValidationException;
+use App\Exceptions\CoverimageValidationException;
 use App\Models\Article;
 
 class ArticleFactory 
@@ -15,7 +17,7 @@ class ArticleFactory
             'draft' => $this->createDraft($data),
             'published' => $this->createPublished($data),
             'featured' => $this->createFeatured($data),
-            default => throw new \Exception("UnKnown Article type")
+            default => throw new ArticleTypeValidationException("this type '$type' is not a vaild atricle type")
         };
 
     }
@@ -43,9 +45,9 @@ class ArticleFactory
     {
         $this->validateData($data);
 
-        if (strlen($data['title']) < 50 )
+        if (empty($data['cover_image']) )
         {
-            throw new \Exception('Title must be at least 50 chars for featured articles');
+            throw new CoverimageValidationException("cover_image should not be empty");
         };
 
         $data['status'] = ArticleStatus::PUBLISHED;

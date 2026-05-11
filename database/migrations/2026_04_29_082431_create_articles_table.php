@@ -18,8 +18,6 @@ return new class extends Migration
             $table->string('title');
             $table->text('body');
             $table->string('status');
-            $table->boolean('is_featured')->default(false);
-            $table->timestamp('published_at')->nullable();
             $table->timestamps();
         });
     }

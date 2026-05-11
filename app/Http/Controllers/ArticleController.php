@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Factories\ArticleFactory;
-use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
 
 class ArticleController extends Controller
@@ -16,7 +15,15 @@ class ArticleController extends Controller
     {
         try
         {
-            $article = $this->articleFactory->create($request->type, $request->all());
+            $validateData = $request->validate(
+                [
+                    'title' => 'required|string|max:255',
+                    'body' => 'required|string',
+                    'cover_image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
+                ]
+            );
+
+            $article = $this->articleFactory->create($request->type, $request->validateData());
 
             return response()->json($article,201);
         }
