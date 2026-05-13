@@ -6,9 +6,13 @@ use App\Enums\ArticleStatus;
 use App\Exceptions\ArticleTypeValidationException;
 use App\Exceptions\CoverimageValidationException;
 use App\Models\Article;
+use App\Repositories\Contracts\ArticleRepositoryInterface;
 
 class ArticleFactory 
 {
+
+    public function __construct(protected ArticleRepositoryInterface $articleRepo){}
+
     public function create(string $type, array $data): Article
     {
 
@@ -28,7 +32,7 @@ class ArticleFactory
         
         $data['status'] = ArticleStatus::DRAFT;
 
-        return Article::create($data);
+        return $this->articleRepo->create($data);
     }
 
     private function createPublished(array $data):Article
@@ -38,7 +42,7 @@ class ArticleFactory
         $data['status'] = ArticleStatus::PUBLISHED;
         $data['published_at'] = now();
 
-        return Article::create($data);
+        return $this->articleRepo->create($data);
     }
 
     private function createFeatured(array $data):Article
@@ -54,7 +58,7 @@ class ArticleFactory
         $data['is_featured'] = true;
         $data['published_at'] = now();
 
-        return Article::create($data);
+        return $this->articleRepo->create($data);
     }
 
     private function validateData(array $data)

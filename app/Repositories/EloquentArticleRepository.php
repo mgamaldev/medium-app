@@ -2,15 +2,37 @@
 
 namespace App\Repositories;
 
-use App\Interfaces\ArticleRepositoryInterface;
 use App\Models\Article;
+use App\Repositories\Contracts\ArticleRepositoryInterface;
 
 class EloquentArticleRepository implements ArticleRepositoryInterface
 {
-    public function getAllPublished()
+    public function all()
     {
-        
+        return Article::all();
     }
+    public function findById(int $id)
+    {
+        return Article::findOrFail($id);
+    }
+    public function getPublished()
+    {
+        return Article::published()->get();
+    }
+    public function getByAuthor(int $userId)
+    {
+        return Article::byAuthor($userId)->get();
+    }
+    public function getTrending()
+    {
+        return Article::trending()->get();
+    }
+    public function create(array $data): Article
+    {
+        return Article::create($data);
+    }
+
+  
 }
 
 ?>
