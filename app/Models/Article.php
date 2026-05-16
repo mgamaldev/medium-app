@@ -3,14 +3,9 @@
 namespace App\Models;
 
 use App\Builders\ArticleQueryBuilder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Models\User;
-use App\Models\Tag;
-use App\Models\Comment;
-use App\Models\Like;
-use App\Models\ReadingList;
 use App\Enums\ArticleStatus;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Override;
 
 class Article extends Model
@@ -23,7 +18,7 @@ class Article extends Model
         return new ArticleQueryBuilder($query);
     }
 
-    protected $fillable = ['title','body','status','published_at','is_featured','cover_image'];
+    protected $fillable = ['title', 'body', 'status', 'published_at', 'is_featured', 'cover_image'];
 
     protected function casts(): array
     {
@@ -37,24 +32,26 @@ class Article extends Model
         return $this->belongsTo(User::class);
 
     }
+
     public function tags()
     {
         return $this->belongsToMany(Tag::class);
 
     }
+
     public function comments()
     {
         return $this->hasMany(Comment::class);
 
     }
+
     public function likes()
     {
         return $this->hasMany(Like::class);
     }
+
     public function readingLists()
     {
         return $this->belongsToMany(ReadingList::class);
     }
-
-    
 }

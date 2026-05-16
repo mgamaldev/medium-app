@@ -41,7 +41,7 @@ class User extends Authenticatable
      */
     protected function casts(): array
     {
-        return [                            
+        return [
             'password' => 'hashed',
             'role' => 'boolean',
         ];
