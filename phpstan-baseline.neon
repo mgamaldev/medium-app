@@ -1,0 +1,37 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Method App\\Builders\\ArticleQueryBuilder\:\:trending\(\) should return static\(App\\Builders\\ArticleQueryBuilder\) but returns App\\Builders\\ArticleQueryBuilder\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Builders/ArticleQueryBuilder.php
+
+		-
+			message: '#^Method App\\Factories\\ArticleFactory\:\:createDraft\(\) should return App\\Models\\Article but returns Illuminate\\Database\\Eloquent\\Model\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Factories/ArticleFactory.php
+
+		-
+			message: '#^Method App\\Factories\\ArticleFactory\:\:createFeatured\(\) should return App\\Models\\Article but returns Illuminate\\Database\\Eloquent\\Model\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Factories/ArticleFactory.php
+
+		-
+			message: '#^Method App\\Factories\\ArticleFactory\:\:createPublished\(\) should return App\\Models\\Article but returns Illuminate\\Database\\Eloquent\\Model\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Factories/ArticleFactory.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Http\\Request\:\:validateData\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/ArticleController.php
+
+		-
+			message: '#^Property App\\ValueObjects\\ReadTime\:\:\$readTime is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/ValueObjects/ReadTime.php

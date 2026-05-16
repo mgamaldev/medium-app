@@ -6,5 +6,3 @@ interface ArticleRepositoryInterface
 {
     public function getAllPublished();
 }
-
-?>
