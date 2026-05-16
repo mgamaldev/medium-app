@@ -9,18 +9,20 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 use App\Enums\ArticleStatus;
+use App\Repositories\Contracts\ArticleRepositoryInterface;
 
 class ArticleRepositoryTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected EloquentArticleRepository $repository;
+    protected ArticleRepositoryInterface $repository;
 
     
     protected function setUp(): void
     {
         parent::setUp();
-        $this->repository = new EloquentArticleRepository();
+
+        $this->repository = $this->app->make(ArticleRepositoryInterface::class);
     }
 
     #[Test]
