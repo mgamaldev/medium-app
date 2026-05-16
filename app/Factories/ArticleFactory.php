@@ -10,8 +10,7 @@ use App\Repositories\Contracts\ArticleRepositoryInterface;
 
 class ArticleFactory
 {
-
-    public function __construct(protected ArticleRepositoryInterface $articleRepo){}
+    public function __construct(protected ArticleRepositoryInterface $articleRepo) {}
 
     public function create(string $type, array $data): Article
     {

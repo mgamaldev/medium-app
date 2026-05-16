@@ -2,14 +2,13 @@
 
 namespace Tests\Feature;
 
+use App\Enums\ArticleStatus;
 use App\Models\Article;
 use App\Models\User;
-use App\Repositories\EloquentArticleRepository;
+use App\Repositories\Contracts\ArticleRepositoryInterface;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
-use App\Enums\ArticleStatus;
-use App\Repositories\Contracts\ArticleRepositoryInterface;
 
 class ArticleRepositoryTest extends TestCase
 {
@@ -17,7 +16,6 @@ class ArticleRepositoryTest extends TestCase
 
     protected ArticleRepositoryInterface $repository;
 
-    
     protected function setUp(): void
     {
         parent::setUp();
@@ -28,7 +26,8 @@ class ArticleRepositoryTest extends TestCase
     #[Test]
     public function can_create_an_article()
     {
-        $user = User::factory()->create(); 
+        $user = User::factory()->create();
+        $this->actingAs($user);
         $data = [
             'title' => 'Test Article',
             'body' => 'This is a test body',
@@ -42,14 +41,14 @@ class ArticleRepositoryTest extends TestCase
         $this->assertEquals('Test Article', $article->title);
         $this->assertDatabaseHas('articles', [
             'title' => 'Test Article',
-            'user_id' => $user->id
+            'user_id' => $user->id,
         ]);
     }
 
     #[Test]
     public function returns_only_published_articles()
     {
-       
+
         Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
         Article::factory()->create(['status' => ArticleStatus::DRAFT]);
 
