@@ -31,8 +31,6 @@ class EloquentArticleRepository implements ArticleRepositoryInterface
     {
         return Article::create($data);
     }
-
-  
 }
 
 ?>
