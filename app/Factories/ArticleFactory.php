@@ -7,13 +7,12 @@ use App\Exceptions\ArticleTypeValidationException;
 use App\Exceptions\CoverimageValidationException;
 use App\Models\Article;
 
-class ArticleFactory 
+class ArticleFactory
 {
     public function create(string $type, array $data): Article
     {
 
-        return match($type)
-        {
+        return match ($type) {
             'draft' => $this->createDraft($data),
             'published' => $this->createPublished($data),
             'featured' => $this->createFeatured($data),
@@ -22,16 +21,16 @@ class ArticleFactory
 
     }
 
-    private function createDraft(array $data):Article
+    private function createDraft(array $data): Article
     {
         $this->validateData($data);
-        
+
         $data['status'] = ArticleStatus::DRAFT;
 
         return Article::create($data);
     }
 
-    private function createPublished(array $data):Article
+    private function createPublished(array $data): Article
     {
         $this->validateData($data);
 
@@ -41,14 +40,13 @@ class ArticleFactory
         return Article::create($data);
     }
 
-    private function createFeatured(array $data):Article
+    private function createFeatured(array $data): Article
     {
         $this->validateData($data);
 
-        if (empty($data['cover_image']) )
-        {
-            throw new CoverimageValidationException("cover_image should not be empty");
-        };
+        if (empty($data['cover_image'])) {
+            throw new CoverimageValidationException('cover_image should not be empty');
+        }
 
         $data['status'] = ArticleStatus::PUBLISHED;
         $data['is_featured'] = true;
@@ -59,12 +57,8 @@ class ArticleFactory
 
     private function validateData(array $data)
     {
-        if (empty($data['title']) || empty($data['body']))
-        {
+        if (empty($data['title']) || empty($data['body'])) {
             throw new \Exception('Title and Body are required');
-        }    
+        }
     }
 }
-
-
-?>

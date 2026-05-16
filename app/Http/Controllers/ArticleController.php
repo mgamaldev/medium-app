@@ -7,14 +7,11 @@ use Illuminate\Http\Request;
 
 class ArticleController extends Controller
 {
-
-    public function __construct(protected ArticleFactory $articleFactory)
-    {}
+    public function __construct(protected ArticleFactory $articleFactory) {}
 
     public function store(Request $request)
     {
-        try
-        {
+        try {
             $validateData = $request->validate(
                 [
                     'title' => 'required|string|max:255',
@@ -25,13 +22,9 @@ class ArticleController extends Controller
 
             $article = $this->articleFactory->create($request->type, $request->validateData());
 
-            return response()->json($article,201);
-        }
-        catch(\Exception $e)
-        {
+            return response()->json($article, 201);
+        } catch (\Exception $e) {
             return response()->json(['Error' => $e->getMessage()], 422);
         }
     }
-
-
 }

@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('articles', function (Blueprint $table) {
-        $table->boolean('is_featured')->default(false)->after('status');
-        $table->timestamp('published_at')->nullable()->after('is_featured');
-        $table->string('cover_image')->nullable()->after('published_at');
+            $table->boolean('is_featured')->default(false)->after('status');
+            $table->timestamp('published_at')->nullable()->after('is_featured');
+            $table->string('cover_image')->nullable()->after('published_at');
         });
     }
 

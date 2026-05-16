@@ -8,5 +8,3 @@ enum ArticleStatus: string
     case PUBLISHED = 'published';
     case ARCHIVED = 'archived';
 }
-
-?>
