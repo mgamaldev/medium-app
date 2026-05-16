@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Interfaces\ArticleRepositoryInterface;
+use App\Repositories\Contracts\ArticleRepositoryInterface;
 use App\Repositories\EloquentArticleRepository;
 use Illuminate\Support\ServiceProvider;
 
