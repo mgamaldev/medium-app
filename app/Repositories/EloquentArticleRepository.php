@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use App\Enums\ArticleStatus;
+use App\Events\ArticlePublished;
 use App\Models\Article;
 use App\Repositories\Contracts\ArticleRepositoryInterface;
 
@@ -36,6 +38,10 @@ class EloquentArticleRepository implements ArticleRepositoryInterface
     {
         /** @var Article $article */
         $article = Article::create($data);
+
+        if ($article->status == ArticleStatus::PUBLISHED->value) {
+            ArticlePublished::dispatch($article);
+        }
 
         return $article;
     }
