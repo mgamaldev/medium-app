@@ -21,7 +21,7 @@ class SendAuthorNotification implements ShouldHandleEventsAfterCommit
      */
     public function handle(ArticlePublished $event): void
     {
-        $author = $event->article->user();
+        $author = $event->article->user;
 
         Log::info("Notification sent to author {$author}");
     }

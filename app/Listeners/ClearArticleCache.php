@@ -5,8 +5,9 @@ namespace App\Listeners;
 use App\Events\ArticlePublished;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Contracts\Events\ShouldHandleEventsAfterCommit;
 
-class ClearArticleCache
+class ClearArticleCache implements ShouldHandleEventsAfterCommit
 {
     /**
      * Create the event listener.

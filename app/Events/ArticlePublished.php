@@ -7,9 +7,10 @@ use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Contracts\Events\ShouldHandleEventsAfterCommit;
 use Illuminate\Queue\SerializesModels;
 
-class ArticlePublished
+class ArticlePublished implements ShouldHandleEventsAfterCommit
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 

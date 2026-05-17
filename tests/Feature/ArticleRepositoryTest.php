@@ -29,6 +29,7 @@ class ArticleRepositoryTest extends TestCase
     #[Test]
     public function can_create_an_article()
     {
+        /** @var User $user */
         $user = User::factory()->create();
         $this->actingAs($user);
         $data = [
