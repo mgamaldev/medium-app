@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Enums\ArticleStatus;
 use App\Models\Article;
 use App\Models\User;
 use App\Strategies\ContentVisibility\ContentVisibilityResolver;
@@ -21,9 +22,12 @@ class ArticlePolicy
      */
     public function view(?User $user, Article $article): bool
     {
-        $resolver = new ContentVisibilityResolver;
+        /**
+         * @var ArticleStatus $status
+         */
+        $status = $article->status;
 
-        $strategy = $resolver->resolve($article);
+        $strategy = ContentVisibilityResolver::resolve($status);
 
         return $strategy->canView($user, $article);
     }
