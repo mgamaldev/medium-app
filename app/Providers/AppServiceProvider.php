@@ -9,8 +9,8 @@ use App\Models\Article;
 use App\Policies\ArticlePolicy;
 use App\Repositories\Contracts\ArticleRepositoryInterface;
 use App\Repositories\EloquentArticleRepository;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider

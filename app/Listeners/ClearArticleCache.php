@@ -3,9 +3,9 @@
 namespace App\Listeners;
 
 use App\Events\ArticlePublished;
+use Illuminate\Contracts\Events\ShouldHandleEventsAfterCommit;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Contracts\Events\ShouldHandleEventsAfterCommit;
 
 class ClearArticleCache implements ShouldHandleEventsAfterCommit
 {

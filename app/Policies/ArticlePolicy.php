@@ -5,7 +5,6 @@ namespace App\Policies;
 use App\Models\Article;
 use App\Models\User;
 use App\Strategies\ContentVisibility\ContentVisibilityResolver;
-use Illuminate\Auth\Access\Response;
 
 class ArticlePolicy
 {
@@ -22,7 +21,7 @@ class ArticlePolicy
      */
     public function view(?User $user, Article $article): bool
     {
-        $resolver = new ContentVisibilityResolver();
+        $resolver = new ContentVisibilityResolver;
 
         $strategy = $resolver->resolve($article);
 

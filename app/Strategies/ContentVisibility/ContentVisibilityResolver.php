@@ -11,16 +11,13 @@ class ContentVisibilityResolver
 {
     public function resolve(Article $article): ContentVisibilityStrategy
     {
-        return match($article->status)
-        {
-            ArticleStatus::PUBLISHED => new PublicVisibilityStrategy(),
-            ArticleStatus::FOLLOWERS_ONLY => new FollowersOnlyVisibilityStrategy(),
-            ArticleStatus::DRAFT => new PrivateDraftVisibilityStrategy(),
+        return match ($article->status) {
+            ArticleStatus::PUBLISHED->value => new PublicVisibilityStrategy,
+            ArticleStatus::FOLLOWERS_ONLY->value => new FollowersOnlyVisibilityStrategy,
+            ArticleStatus::DRAFT->value => new PrivateDraftVisibilityStrategy,
 
             default => throw new InvalidArgumentException('Unknown article visibility status')
         };
 
     }
-    
-    
 }
