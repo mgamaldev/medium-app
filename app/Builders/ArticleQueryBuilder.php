@@ -9,7 +9,7 @@ class ArticleQueryBuilder extends Builder
 {
     public function published(): static
     {
-        return $this->where('status', ArticleStatus::PUBLISHED->value);
+        return $this->where('status', ArticleStatus::PUBLISHED);
     }
 
     public function byAuthor(int $userId): static

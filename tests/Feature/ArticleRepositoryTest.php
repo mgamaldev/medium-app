@@ -61,7 +61,7 @@ class ArticleRepositoryTest extends TestCase
         $this->assertCount(1, $results);
         $this->assertEquals(ArticleStatus::PUBLISHED, $results->first()->status);
     }
-
+    #[Test]
     public function dispatches_article_published_event()
     {
         Event::fake();
@@ -80,7 +80,7 @@ class ArticleRepositoryTest extends TestCase
         Event::assertDispatched(ArticlePublished::class);
 
     }
-
+    #[Test]
     public function not_dispatch_fails_event()
     {
         Event::fake();

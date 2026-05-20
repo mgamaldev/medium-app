@@ -22,12 +22,8 @@ class ArticlePolicy
      */
     public function view(?User $user, Article $article): bool
     {
-        /**
-         * @var ArticleStatus $status
-         */
-        $status = $article->status;
 
-        $strategy = ContentVisibilityResolver::resolve($status);
+        $strategy = ContentVisibilityResolver::resolve($article);
 
         return $strategy->canView($user, $article);
     }

@@ -2,20 +2,22 @@
 
 namespace App\Strategies\ContentVisibility;
 
+use App\Models\Article;
 use App\Enums\ArticleStatus;
+use App\Enums\ArticleVisibility;
 use App\Strategies\Contracts\ContentVisibilityStrategy;
-use InvalidArgumentException;
 
 class ContentVisibilityResolver
 {
-    public static function resolve(ArticleStatus $status): ContentVisibilityStrategy
+    public static function resolve(Article $article): ContentVisibilityStrategy
     {
-        return match ($status) {
-            ArticleStatus::PUBLISHED => new PublicVisibilityStrategy,
-            ArticleStatus::FOLLOWERS_ONLY => new FollowersOnlyVisibilityStrategy,
+        return match ($article->status) {
             ArticleStatus::DRAFT => new PrivateDraftVisibilityStrategy,
-
-            default => throw new InvalidArgumentException('Unknown article visibility status')
+            ArticleStatus::ARCHIVED => new ArchivedVisibilityStrategy,
+            ArticleStatus::PUBLISHED => match($article->visibility) {
+                ArticleVisibility::PUBLIC => new PublicVisibilityStrategy,
+                ArticleVisibility::FOLLOWERS_ONLY => new FollowersOnlyVisibilityStrategy
+            }
         };
 
     }

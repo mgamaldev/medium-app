@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Enums\ArticleStatus;
+use App\Enums\ArticleVisibility;
 use App\Models\Article;
 use App\Models\User;
 use App\Policies\ArticlePolicy;
@@ -24,24 +25,28 @@ class ArticleVisibilityTest extends TestCase
         $this->policy = $this->app->make(ArticlePolicy::class);
 
     }
-
     #[Test]
     public function guest_user_can_view_published_article()
     {
-        $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
+        $article = Article::factory()->create([
+            'status' => ArticleStatus::PUBLISHED,
+            'visibility' => ArticleVisibility::PUBLIC
+        ]);
 
         $result = $this->policy->view(null, $article);
 
         $this->assertTrue($result);
 
     }
-
     #[Test]
     public function authenticated_user_can_view_published_article()
     {
         $user = User::factory()->create();
 
-        $article = Article::factory()->create(['status' => ArticleStatus::PUBLISHED]);
+        $article = Article::factory()->create([
+            'status' => ArticleStatus::PUBLISHED,
+            'visibility' => ArticleVisibility::PUBLIC
+        ]);
 
         $result = $this->policy->view($user, $article);
 
@@ -67,7 +72,10 @@ class ArticleVisibilityTest extends TestCase
 
         $follower = User::factory()->create();
 
-        $article = Article::factory()->create(['status' => ArticleStatus::FOLLOWERS_ONLY, 'user_id' => $author->id]);
+        $article = Article::factory()->create([
+            'status' => ArticleStatus::PUBLISHED,
+            'visibility' => ArticleVisibility::FOLLOWERS_ONLY,
+            'user_id' => $author->id]);
 
         DB::table('user_follower')->insert([
             'user_id' => $author->id,

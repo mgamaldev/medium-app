@@ -3,10 +3,10 @@
 namespace App\Listeners;
 
 use App\Events\ArticlePublished;
-use Illuminate\Contracts\Events\ShouldHandleEventsAfterCommit;
+use App\Models\User;
 use Illuminate\Support\Facades\Log;
 
-class SendAuthorNotification implements ShouldHandleEventsAfterCommit
+class SendAuthorNotification
 {
     /**
      * Create the event listener.
@@ -21,6 +21,7 @@ class SendAuthorNotification implements ShouldHandleEventsAfterCommit
      */
     public function handle(ArticlePublished $event): void
     {
+        /** @var User $author */
         $author = $event->article->user;
 
         Log::info("Notification sent to author {$author}");
