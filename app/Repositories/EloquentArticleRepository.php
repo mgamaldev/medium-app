@@ -39,7 +39,7 @@ class EloquentArticleRepository implements ArticleRepositoryInterface
         /** @var Article $article */
         $article = Article::create($data);
 
-        if ($article->status == ArticleStatus::PUBLISHED->value) {
+        if ($article->status == ArticleStatus::PUBLISHED) {
             ArticlePublished::dispatch($article);
         }
 
