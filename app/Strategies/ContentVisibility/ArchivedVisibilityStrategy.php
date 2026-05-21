@@ -10,11 +10,10 @@ class ArchivedVisibilityStrategy implements ContentVisibilityStrategy
 {
     public function canView(?User $user, Article $article): bool
     {
-        if(! $user)
-        {
+        if (! $user) {
             return false;
         }
 
-        return $user->id ===  $article->user_id;
+        return $user->id === $article->user_id;
     }
 }

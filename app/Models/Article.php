@@ -28,7 +28,7 @@ class Article extends Model
     {
         return [
             'status' => ArticleStatus::class,
-            'visibility' => ArticleVisibility::class
+            'visibility' => ArticleVisibility::class,
         ];
     }
 

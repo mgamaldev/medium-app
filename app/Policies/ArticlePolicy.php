@@ -2,7 +2,6 @@
 
 namespace App\Policies;
 
-use App\Enums\ArticleStatus;
 use App\Models\Article;
 use App\Models\User;
 use App\Strategies\ContentVisibility\ContentVisibilityResolver;
