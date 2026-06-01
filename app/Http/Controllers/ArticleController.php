@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Factories\ArticleFactory;
+use App\Models\Article;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ArticleController extends Controller
 {
@@ -26,5 +28,12 @@ class ArticleController extends Controller
         } catch (\Exception $e) {
             return response()->json(['Error' => $e->getMessage()], 422);
         }
+    }
+
+    public function show(Article $article)
+    {
+        Gate::authorize('view', $article);
+
+        return response()->json($article, 200);
     }
 }

@@ -4,12 +4,14 @@ namespace App\Models;
 
 use App\Builders\ArticleQueryBuilder;
 use App\Enums\ArticleStatus;
+use App\Enums\ArticleVisibility;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property ArticleStatus $status
+ * @property ArticleVisibility $visibility
  */
 class Article extends Model
 {
@@ -26,6 +28,7 @@ class Article extends Model
     {
         return [
             'status' => ArticleStatus::class,
+            'visibility' => ArticleVisibility::class,
         ];
     }
 

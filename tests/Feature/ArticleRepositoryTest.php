@@ -29,6 +29,7 @@ class ArticleRepositoryTest extends TestCase
     #[Test]
     public function can_create_an_article()
     {
+        /** @var User $user */
         $user = User::factory()->create();
         $this->actingAs($user);
         $data = [
@@ -61,6 +62,7 @@ class ArticleRepositoryTest extends TestCase
         $this->assertEquals(ArticleStatus::PUBLISHED, $results->first()->status);
     }
 
+    #[Test]
     public function dispatches_article_published_event()
     {
         Event::fake();
@@ -80,6 +82,7 @@ class ArticleRepositoryTest extends TestCase
 
     }
 
+    #[Test]
     public function not_dispatch_fails_event()
     {
         Event::fake();
