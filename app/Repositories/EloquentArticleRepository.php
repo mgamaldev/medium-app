@@ -6,12 +6,13 @@ use App\Enums\ArticleStatus;
 use App\Events\ArticlePublished;
 use App\Models\Article;
 use App\Repositories\Contracts\ArticleRepositoryInterface;
+use Illuminate\Pagination\Paginator;
 
 class EloquentArticleRepository implements ArticleRepositoryInterface
 {
     public function all()
     {
-        return Article::all();
+        return Article::with(['user','tags'])->paginate(10);
     }
 
     public function findById(int $id)
