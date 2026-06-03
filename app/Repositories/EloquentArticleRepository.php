@@ -11,7 +11,7 @@ class EloquentArticleRepository implements ArticleRepositoryInterface
 {
     public function all()
     {
-        return Article::all();
+        return Article::with(['user', 'tags'])->paginate(10);
     }
 
     public function findById(int $id)
