@@ -57,11 +57,14 @@ class User extends Authenticatable
         return $this->belongsToMany(User::class, 'user_follower', 'follower_id', 'user_id');
     }
 
+<<<<<<< HEAD
     public function followers()
     {
         return $this->belongsToMany(User::class, 'user_follower', 'user_id', 'follower_id');
     }
 
+=======
+>>>>>>> 74b904f ( add userFollowTest and ArticlePublishingTest + Edit Article and User models)
     public function follow(User $userToFollow)
     {
         if ($this->id === $userToFollow->id) {
@@ -72,13 +75,17 @@ class User extends Authenticatable
 
         return $this;
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 74b904f ( add userFollowTest and ArticlePublishingTest + Edit Article and User models)
     public function unfollow(User $userToUnfollow)
     {
         $this->following()->detach($userToUnfollow->id);
 
         return $this;
     }
+<<<<<<< HEAD
 
     public function feed()
     {
@@ -107,4 +114,6 @@ class User extends Authenticatable
             'updated_at' => now(),
         ]);
     }
+=======
+>>>>>>> 74b904f ( add userFollowTest and ArticlePublishingTest + Edit Article and User models)
 }

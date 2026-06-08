@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+<<<<<<< HEAD
 use App\Enums\ArticleStatus;
 use App\Models\Article;
 use App\Models\User;
@@ -80,5 +81,17 @@ class FeedRankingTest extends TestCase
 
         $this->assertCount(0, $feed);
 
+=======
+use PHPUnit\Framework\TestCase;
+
+class FeedRankingTest extends TestCase
+{
+    /**
+     * A basic unit test example.
+     */
+    public function test_example(): void
+    {
+        $this->assertTrue(true);
+>>>>>>> 74b904f ( add userFollowTest and ArticlePublishingTest + Edit Article and User models)
     }
 }
