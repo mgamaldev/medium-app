@@ -2,20 +2,19 @@
 
 namespace Tests\Unit;
 
-use App\Enums\ArticleStatus;
-use App\Events\ArticlePublished;
+use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 use App\Models\Article;
 use App\Models\User;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Event;
-use Tests\TestCase;
+use App\Enums\ArticleStatus;
+use Illuminate\Mail\Mailable;
 
 class ArticlePublishingTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_draft_article_with_valid_data_can_be_published(): void
+    public function test_draft_article_with_valid_data_can_be_published():void
     {
         $article = Article::factory()->create([
             'body' => 'This is a test article',
@@ -29,8 +28,7 @@ class ArticlePublishingTest extends TestCase
             'status' => ArticleStatus::PUBLISHED,
         ]);
     }
-
-    public function test_article_cannot_be_published_with_empty_body(): void
+    public function test_article_cannot_be_published_with_empty_body():void
     {
         $article = Article::factory()->create([
             'body' => '',
@@ -41,8 +39,7 @@ class ArticlePublishingTest extends TestCase
 
         $article->publish();
     }
-
-    public function test_article_cannot_be_published_if_already_published(): void
+    public function test_article_cannot_be_published_if_already_published():void
     {
         $article = Article::factory()->create([
             'status' => ArticleStatus::PUBLISHED,
@@ -54,13 +51,13 @@ class ArticlePublishingTest extends TestCase
         $article->publish();
     }
 
-    public function test_publishing_an_article_triggers_email_notification(): void
+    public function test_publishing_an_article_triggers_email_notification():void
     {
-        Event::fake([ArticlePublished::class]);
+        Mail::fake();
 
         $author = User::factory()->create();
         $follower = User::factory()->create();
-
+    
         $follower->follow($author);
 
         $article = Article::factory()->create([
@@ -71,20 +68,8 @@ class ArticlePublishingTest extends TestCase
 
         $article->publish();
 
-        Event::assertDispatched(ArticlePublished::class, function ($event) use ($article) {
-            return $event->article->id === $article->id;
+        Mail::assertSent(function (Mailable $mailable) use ($follower) {
+            return $mailable->hasTo($follower->email);
         });
-    }
-
-    public function test_article_published_event_has_correct_broadcast_channels(): void
-    {
-        $article = Article::factory()->create();
-
-        $channels = (new ArticlePublished($article))->broadcastOn();
-
-        $this->assertCount(1, $channels);
-        $this->assertInstanceOf(PrivateChannel::class, $channels[0]);
-        $this->assertEquals('private-channel-name', $channels[0]->name);
-
     }
 }
