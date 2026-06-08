@@ -57,11 +57,6 @@ class User extends Authenticatable
         return $this->belongsToMany(User::class, 'user_follower', 'follower_id', 'user_id');
     }
 
-    public function followers()
-    {
-        return $this->belongsToMany(User::class, 'user_follower', 'user_id', 'follower_id');
-    }
-
     public function follow(User $userToFollow)
     {
         if ($this->id === $userToFollow->id) {
@@ -72,39 +67,10 @@ class User extends Authenticatable
 
         return $this;
     }
-
     public function unfollow(User $userToUnfollow)
     {
         $this->following()->detach($userToUnfollow->id);
 
         return $this;
-    }
-
-    public function feed()
-    {
-        $followedUserId = $this->following()->pluck('user_id');
-
-        return Article::query()->whereIn('user_id', $followedUserId)
-            ->where('status', ArticleStatus::PUBLISHED)
-            ->orderBy('published_at', 'desc')
-            ->get();
-    }
-
-    public function hasDigestBeenSent(string $weekOf)
-    {
-        return DB::table('digest_sends')
-            ->where('user_id', $this->id)
-            ->where('week_of', $weekOf)
-            ->exists();
-    }
-
-    public function recordDigestSend(string $weekOf)
-    {
-        return DB::table('digest_sends')->insert([
-            'user_id' => $this->id,
-            'week_of' => $weekOf,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
     }
 }
