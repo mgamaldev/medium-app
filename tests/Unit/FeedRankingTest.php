@@ -42,7 +42,43 @@ class FeedRankingTest extends TestCase
 
     }
 
-    public function test_feed_does_not_contain_draft_articles(): void {}
+    public function test_feed_does_not_contain_draft_articles(): void
+    {
+        $user = User::factory()->create();
+        $author = User::factory()->create();
 
-    public function test_feed_does_not_contain_articles_from_unfollowed_users(): void {}
+        $user->follow($author);
+
+        $article1 = Article::factory()->create([
+            'user_id' => $author->id,
+            'status' => ArticleStatus::PUBLISHED,
+        ]);
+
+        $article2 = Article::factory()->create([
+            'user_id' => $author->id,
+            'status' => ArticleStatus::DRAFT,
+        ]);
+
+        $feed = $user->feed();
+
+        $this->assertCount(1, $feed);
+
+        $this->assertEquals($article1->id, $feed->first()->id);
+    }
+
+    public function test_feed_does_not_contain_articles_from_unfollowed_users(): void
+    {
+        $user = User::factory()->create();
+        $author = User::factory()->create();
+
+        $article = Article::factory()->create([
+            'user_id' => $author->id,
+            'status' => ArticleStatus::PUBLISHED,
+        ]);
+
+        $feed = $user->feed();
+
+        $this->assertCount(0, $feed);
+
+    }
 }
