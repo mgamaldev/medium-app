@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ArticleStatus;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -61,10 +62,22 @@ class User extends Authenticatable
 
         return $this;
     }
+
     public function unfollow(User $userToUnfollow)
     {
         $this->following()->detach($userToUnfollow->id);
 
         return $this;
+    }
+
+    public function feed()
+    {
+        $followedUserId = $this->following()->pluck('user_id');
+
+        return Article::query()->whereIn('user_id', $followedUserId)
+            ->where('status', ArticleStatus::PUBLISHED)
+            ->orderBy('published_at', 'desc')
+            ->get();
+
     }
 }
