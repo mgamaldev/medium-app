@@ -79,5 +79,6 @@ class Article extends Model
             'status' => ArticleStatus::PUBLISHED,
             'published_at' => now(),
         ]);
+
     }
 }
