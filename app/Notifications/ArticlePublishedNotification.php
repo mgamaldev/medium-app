@@ -2,23 +2,19 @@
 
 namespace App\Notifications;
 
-use App\Models\Article;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Queue\SerializesModels;
 
-class ArticlePublishedNotification extends Notification implements ShouldQueue
+class ArticlePublishedNotification extends Notification
 {
-    use Queueable, SerializesModels;
+    use Queueable;
 
-    public function viaQueue(object $notifiable): string
-    {
-        return 'notifications';
-    }
-
-    public function __construct(public Article $article)
+    /**
+     * Create a new notification instance.
+     */
+    public function __construct()
     {
         //
     }
@@ -39,7 +35,9 @@ class ArticlePublishedNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->line("This Article has been published {$this->article->title}");
+            ->line('The introduction to the notification.')
+            ->action('Notification Action', url('/'))
+            ->line('Thank you for using our application!');
     }
 
     /**
