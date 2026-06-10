@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ArticleStatus;
 use App\Factories\ArticleFactory;
 use App\Models\Article;
-use App\Models\User;
-use App\Notifications\ArticlePublishedNotification;
 use App\Repositories\Contracts\ArticleRepositoryInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use App\Notifications\ArticlePublishedNotification;
+use Illuminate\Support\Facades\Notification;
 
 class ArticleController extends Controller
 {
@@ -17,20 +17,23 @@ class ArticleController extends Controller
 
     public function store(Request $request)
     {
-        $validateData = $request->validate(
-            [
-                'title' => 'required|string|max:255',
-                'body' => 'required|string',
-                'cover_image' => 'image|mimes:jpeg,png,jpg,webp|max:2048',
-                'status' => 'required|string',
-            ]
-        );
-        $validateData['user_id'] = $request->user()->id;
+        try {
+            $validateData = $request->validate(
+                [
+                    'title' => 'required|string|max:255',
+                    'body' => 'required|string',
+                    'cover_image' => 'image|mimes:jpeg,png,jpg,webp|max:2048',
+                ]
+            );
 
-        $article = $this->articleFactory->create($validateData['status'], $validateData);
 
-        return response()->json($article, 201);
+            $article = $this->articleFactory->create($request->type, $validateData);
 
+            return response()->json($article, 201);
+
+        } catch (\Exception $e) {
+            return response()->json(['Error' => $e->getMessage()], 422);
+        }
     }
 
     public function show(Article $article)
@@ -42,24 +45,20 @@ class ArticleController extends Controller
 
     public function publish(Article $article)
     {
+        $article->update([
+            'status' => ArticleStatus::PUBLISHED,
+            'published_at' => now(),
+        ]);
 
-        if (Auth::id() !== $article->user_id) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-        $article->publish();
+        $author = $article->user; 
+    
+        $followers = $author->followers; 
 
-        /** @var User $author */
-        $author = $article->user;
-
-        $followers = $author->followers()->get();
-
-        foreach ($followers as $recipient) {
-            $recipient->notify(new ArticlePublishedNotification($article));
-        }
+        Notification::send($followers,  ArticlePublishedNotification::class);
 
         return response()->json([
-            'message' => 'Article published successfully',
-            'article' => $article,
+        'message' => 'Article published successfully',
+        'article' => $article
         ], 200);
     }
 }
