@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Builders\ArticleQueryBuilder;
 use App\Enums\ArticleStatus;
 use App\Enums\ArticleVisibility;
-use App\Events\ArticlePublished;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
