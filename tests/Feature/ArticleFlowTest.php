@@ -5,9 +5,9 @@ namespace Tests\Feature;
 use App\Enums\ArticleStatus;
 use App\Models\Article;
 use App\Models\User;
+use App\Notifications\ArticlePublishedNotification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
-use App\Notifications\ArticlePublishedNotification;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -17,7 +17,7 @@ class ArticleFlowTest extends TestCase
 
     #[Test]
     public function test_author_can_create_draft_article(): void
-    {  
+    {
 
         $author = User::factory()->create();
 
@@ -67,18 +67,10 @@ class ArticleFlowTest extends TestCase
         Notification::assertNotSentTo($author, ArticlePublishedNotification::class);
 
     }
-    public function test_published_articles_appear_in_feed_and_drafts_do_not(): void
-    {
 
-    }
-    public function test_article_creation_requires_a_title(): void
-    {
-        
-    }
-    public function test_user_cannot_publish_others_articles(): void
-    {
-        
-    }
+    public function test_published_articles_appear_in_feed_and_drafts_do_not(): void {}
 
+    public function test_article_creation_requires_a_title(): void {}
 
+    public function test_user_cannot_publish_others_articles(): void {}
 }
