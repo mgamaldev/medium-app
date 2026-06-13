@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\ArticleStatus;
 use App\Factories\ArticleFactory;
 use App\Models\Article;
 use App\Models\User;
@@ -48,10 +47,7 @@ class ArticleController extends Controller
         if (Auth::id() !== $article->user_id) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
-        $article->update([
-            'status' => ArticleStatus::PUBLISHED,
-            'published_at' => now(),
-        ]);
+        $article->publish();
 
         /** @var User $author */
         $author = $article->user;
