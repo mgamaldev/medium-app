@@ -10,6 +10,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
+use Laravel\Sanctum\Sanctum;
 
 class ArticleFlowTest extends TestCase
 {
@@ -21,7 +22,7 @@ class ArticleFlowTest extends TestCase
 
         $author = User::factory()->create();
 
-        $this->actingAs($author);
+        Sanctum::actingAs($author);
 
         $data = [
             'title' => 'Test Title',
@@ -50,7 +51,7 @@ class ArticleFlowTest extends TestCase
 
         $author->followers()->attach($follower);
 
-        $this->actingAs($author);
+        Sanctum::actingAs($author);
 
         $article = Article::factory()->create([
             'user_id' => $author->id,
@@ -66,6 +67,8 @@ class ArticleFlowTest extends TestCase
             'user_id' => $author->id,
             'status' => ArticleStatus::PUBLISHED,
         ]);
+
+        $this->assertNotNull($article->fresh()->published_at);
 
         Notification::assertSentTo($follower, ArticlePublishedNotification::class);
         Notification::assertNotSentTo($author, ArticlePublishedNotification::class);
