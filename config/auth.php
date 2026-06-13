@@ -67,6 +67,11 @@ return [
             'model' => env('AUTH_MODEL', User::class),
         ],
 
+        'sanctum' => [
+            'driver' => 'sanctum',
+            'provider' => 'users',
+        ],
+
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
