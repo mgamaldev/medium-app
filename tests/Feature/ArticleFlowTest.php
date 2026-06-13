@@ -36,16 +36,19 @@ class ArticleFlowTest extends TestCase
         $this->assertDatabaseHas('articles', [
             'title' => 'Test Title',
             'user_id' => $author->id,
-            'status' => 'draft',
+            'status' => ArticleStatus::DRAFT,
         ]);
     }
 
+    #[Test]
     public function test_author_can_publish_their_article(): void
     {
         Notification::fake();
 
         $author = User::factory()->create();
         $follower = User::factory()->create();
+
+        $author->followers()->attach($follower);
 
         $this->actingAs($author);
 
@@ -59,7 +62,8 @@ class ArticleFlowTest extends TestCase
         $response->assertStatus(200);
 
         $this->assertDatabaseHas('articles', [
-            'id' => $author->id,
+            'id' => $article->id,
+            'user_id' => $author->id,
             'status' => ArticleStatus::PUBLISHED,
         ]);
 
@@ -68,9 +72,74 @@ class ArticleFlowTest extends TestCase
 
     }
 
-    public function test_published_articles_appear_in_feed_and_drafts_do_not(): void {}
+    #[Test]
+    public function test_published_articles_appear_in_feed_and_drafts_do_not(): void
+    {
+        $reader = User::factory()->create();
+        $author = User::factory()->create();
 
-    public function test_article_creation_requires_a_title(): void {}
+        $reader->follow($author);
 
-    public function test_user_cannot_publish_others_articles(): void {}
+        $draftArticle = Article::factory()->create([
+            'user_id' => $author->id,
+            'status' => ArticleStatus::DRAFT,
+        ]);
+
+        $publishedArticle = Article::factory()->create([
+            'user_id' => $author->id,
+            'status' => ArticleStatus::PUBLISHED,
+            'published_at' => now(),
+        ]);
+
+        $feedArticle = $reader->feed();
+
+        $this->assertTrue($feedArticle->contains($publishedArticle));
+        $this->assertFalse($feedArticle->contains($draftArticle));
+
+    }
+
+    #[Test]
+    public function test_article_creation_requires_a_title(): void
+    {
+        $author = User::factory()->create();
+
+        $this->actingAs($author);
+
+        $data = [
+            'title' => '',
+            'body' => 'Test Body',
+        ];
+
+        $response = $this->postJson('/api/articles', $data);
+
+        $response->assertStatus(422);
+
+        $response->assertJsonValidationErrors(['title']);
+
+        $this->assertDatabaseCount('articles', 0);
+
+    }
+
+    #[Test]
+    public function test_user_cannot_publish_others_articles(): void
+    {
+        $author = User::factory()->create();
+        $intruder = User::factory()->create();
+
+        $article = Article::factory()->create([
+            'user_id' => $author->id,
+            'status' => ArticleStatus::DRAFT,
+        ]);
+
+        $this->actingAs($intruder);
+
+        $response = $this->postJson("/api/articles/{$article->id}/publish");
+
+        $response->assertStatus(403);
+
+        $this->assertDatabaseHas('articles', [
+            'id' => $article->id,
+            'status' => ArticleStatus::DRAFT,
+        ]);
+    }
 }
