@@ -643,6 +643,7 @@
         },
         {
             "name": "guzzlehttp/guzzle",
+<<<<<<< HEAD
             "version": "7.13.2",
             "source": {
                 "type": "git",
@@ -653,16 +654,36 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/guzzle/guzzle/zipball/bcd989ad36c92d42a3715379af91f2defee5b8dd",
                 "reference": "bcd989ad36c92d42a3715379af91f2defee5b8dd",
+=======
+            "version": "7.11.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guzzle/guzzle.git",
+                "reference": "5af96f374e0ab4ebd747b8310888c99d3adb0a8c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/5af96f374e0ab4ebd747b8310888c99d3adb0a8c",
+                "reference": "5af96f374e0ab4ebd747b8310888c99d3adb0a8c",
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "guzzlehttp/promises": "^2.5",
+<<<<<<< HEAD
                 "guzzlehttp/psr7": "^2.12.3",
                 "php": "^7.2.5 || ^8.0",
                 "psr/http-client": "^1.0",
                 "symfony/deprecation-contracts": "^2.5 || ^3.0",
                 "symfony/polyfill-php80": "^1.25"
+=======
+                "guzzlehttp/psr7": "^2.11",
+                "php": "^7.2.5 || ^8.0",
+                "psr/http-client": "^1.0",
+                "symfony/deprecation-contracts": "^2.5 || ^3.0",
+                "symfony/polyfill-php80": "^1.24"
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
             },
             "provide": {
                 "psr/http-client-implementation": "1.0"
@@ -670,8 +691,13 @@
             "require-dev": {
                 "bamarni/composer-bin-plugin": "^1.8.2",
                 "ext-curl": "*",
+<<<<<<< HEAD
                 "guzzle/client-integration-tests": "3.0.3",
                 "guzzlehttp/test-server": "^0.6",
+=======
+                "guzzle/client-integration-tests": "3.0.2",
+                "guzzlehttp/test-server": "^0.5",
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
                 "php-http/message-factory": "^1.1",
                 "phpunit/phpunit": "^8.5.52 || ^9.6.34",
                 "psr/log": "^1.1 || ^2.0 || ^3.0"
@@ -751,7 +777,11 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/guzzle/issues",
+<<<<<<< HEAD
                 "source": "https://github.com/guzzle/guzzle/tree/7.13.2"
+=======
+                "source": "https://github.com/guzzle/guzzle/tree/7.11.1"
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
             },
             "funding": [
                 {
@@ -767,7 +797,11 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2026-07-05T19:00:11+00:00"
+=======
+            "time": "2026-06-07T22:54:06+00:00"
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
         },
         {
             "name": "guzzlehttp/promises",
@@ -855,6 +889,7 @@
         },
         {
             "name": "guzzlehttp/psr7",
+<<<<<<< HEAD
             "version": "2.12.3",
             "source": {
                 "type": "git",
@@ -865,6 +900,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/guzzle/psr7/zipball/7ec62dc3f44aa218487dbed81a9bf9bc647be55d",
                 "reference": "7ec62dc3f44aa218487dbed81a9bf9bc647be55d",
+=======
+            "version": "2.11.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guzzle/psr7.git",
+                "reference": "bbb5e61349fa5cb822b3e87842b951088b76b81f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/bbb5e61349fa5cb822b3e87842b951088b76b81f",
+                "reference": "bbb5e61349fa5cb822b3e87842b951088b76b81f",
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
                 "shasum": ""
             },
             "require": {
@@ -873,7 +920,11 @@
                 "psr/http-message": "^1.1 || ^2.0",
                 "ralouphie/getallheaders": "^3.0",
                 "symfony/deprecation-contracts": "^2.5 || ^3.0",
+<<<<<<< HEAD
                 "symfony/polyfill-php80": "^1.25"
+=======
+                "symfony/polyfill-php80": "^1.24"
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
             },
             "provide": {
                 "psr/http-factory-implementation": "1.0",
@@ -954,7 +1005,11 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/psr7/issues",
+<<<<<<< HEAD
                 "source": "https://github.com/guzzle/psr7/tree/2.12.3"
+=======
+                "source": "https://github.com/guzzle/psr7/tree/2.11.0"
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
             },
             "funding": [
                 {
@@ -970,6 +1025,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2026-06-23T15:21:08+00:00"
         },
         {
@@ -984,6 +1040,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/guzzle/uri-template/zipball/9c19128923b05a5d7355e5d2318d7808b7e33bbd",
                 "reference": "9c19128923b05a5d7355e5d2318d7808b7e33bbd",
+=======
+            "time": "2026-06-02T12:30:48+00:00"
+        },
+        {
+            "name": "guzzlehttp/uri-template",
+            "version": "v1.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/guzzle/uri-template.git",
+                "reference": "7fe811c23a9e3cd712b4389eaeb50b5456d8c529"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/guzzle/uri-template/zipball/7fe811c23a9e3cd712b4389eaeb50b5456d8c529",
+                "reference": "7fe811c23a9e3cd712b4389eaeb50b5456d8c529",
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
                 "shasum": ""
             },
             "require": {
@@ -1040,7 +1112,11 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/uri-template/issues",
+<<<<<<< HEAD
                 "source": "https://github.com/guzzle/uri-template/tree/v1.0.8"
+=======
+                "source": "https://github.com/guzzle/uri-template/tree/v1.0.7"
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
             },
             "funding": [
                 {
@@ -1056,6 +1132,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2026-06-23T13:02:23+00:00"
         },
         {
@@ -1070,6 +1147,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/laravel/framework/zipball/7adfddbf4738f2e6cae5419b0e6bc46d4cccfbcf",
                 "reference": "7adfddbf4738f2e6cae5419b0e6bc46d4cccfbcf",
+=======
+            "time": "2026-06-12T21:33:43+00:00"
+        },
+        {
+            "name": "laravel/framework",
+            "version": "v12.62.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/framework.git",
+                "reference": "f7e61eb1e0e06a38996802b769bce9127aec227c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/f7e61eb1e0e06a38996802b769bce9127aec227c",
+                "reference": "f7e61eb1e0e06a38996802b769bce9127aec227c",
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
                 "shasum": ""
             },
             "require": {
@@ -1278,6 +1371,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
+<<<<<<< HEAD
             "time": "2026-07-07T14:16:35+00:00"
         },
         {
@@ -1372,6 +1466,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/laravel/prompts/zipball/7753c65c281c2550c7c183f14e18062073b7d821",
                 "reference": "7753c65c281c2550c7c183f14e18062073b7d821",
+=======
+            "time": "2026-06-09T13:50:13+00:00"
+        },
+        {
+            "name": "laravel/prompts",
+            "version": "v0.3.18",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/prompts.git",
+                "reference": "a19af51bb144bf87f08397921fa619f85c7d4e72"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/prompts/zipball/a19af51bb144bf87f08397921fa619f85c7d4e72",
+                "reference": "a19af51bb144bf87f08397921fa619f85c7d4e72",
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
                 "shasum": ""
             },
             "require": {
@@ -1415,9 +1525,15 @@
             "description": "Add beautiful and user-friendly forms to your command-line applications.",
             "support": {
                 "issues": "https://github.com/laravel/prompts/issues",
+<<<<<<< HEAD
                 "source": "https://github.com/laravel/prompts/tree/v0.3.21"
             },
             "time": "2026-06-26T00:11:25+00:00"
+=======
+                "source": "https://github.com/laravel/prompts/tree/v0.3.18"
+            },
+            "time": "2026-05-19T00:47:18+00:00"
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
         },
         {
             "name": "laravel/sanctum",
@@ -1481,6 +1597,7 @@
                 "source": "https://github.com/laravel/sanctum"
             },
             "time": "2026-04-30T11:46:25+00:00"
+<<<<<<< HEAD
         },
         {
             "name": "laravel/sentinel",
@@ -1537,6 +1654,8 @@
                 "source": "https://github.com/laravel/sentinel/tree/v1.1.0"
             },
             "time": "2026-03-24T14:03:38+00:00"
+=======
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
         },
         {
             "name": "laravel/serializable-closure",
@@ -1856,6 +1975,7 @@
         },
         {
             "name": "league/flysystem",
+<<<<<<< HEAD
             "version": "3.35.2",
             "source": {
                 "type": "git",
@@ -1866,6 +1986,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/b277b5dc3d56650b68904117124e79c851e12376",
                 "reference": "b277b5dc3d56650b68904117124e79c851e12376",
+=======
+            "version": "3.34.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/flysystem.git",
+                "reference": "2daaac3b0d4c83ea7ed5d8586e786f5d00f3540e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/2daaac3b0d4c83ea7ed5d8586e786f5d00f3540e",
+                "reference": "2daaac3b0d4c83ea7ed5d8586e786f5d00f3540e",
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
                 "shasum": ""
             },
             "require": {
@@ -1933,9 +2065,15 @@
             ],
             "support": {
                 "issues": "https://github.com/thephpleague/flysystem/issues",
+<<<<<<< HEAD
                 "source": "https://github.com/thephpleague/flysystem/tree/3.35.2"
             },
             "time": "2026-07-06T14:42:07+00:00"
+=======
+                "source": "https://github.com/thephpleague/flysystem/tree/3.34.0"
+            },
+            "time": "2026-05-14T10:28:08+00:00"
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
         },
         {
             "name": "league/flysystem-local",
@@ -3223,6 +3361,7 @@
         },
         {
             "name": "psy/psysh",
+<<<<<<< HEAD
             "version": "v0.12.24",
             "source": {
                 "type": "git",
@@ -3233,6 +3372,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/bobthecow/psysh/zipball/ca0fdcf8a7617afa3adfdf1b5fef573dffb69ca1",
                 "reference": "ca0fdcf8a7617afa3adfdf1b5fef573dffb69ca1",
+=======
+            "version": "v0.12.23",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bobthecow/psysh.git",
+                "reference": "4dcc0f08047d52bbde475eda481146fd8e27e1a4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/4dcc0f08047d52bbde475eda481146fd8e27e1a4",
+                "reference": "4dcc0f08047d52bbde475eda481146fd8e27e1a4",
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
                 "shasum": ""
             },
             "require": {
@@ -3296,9 +3447,15 @@
             ],
             "support": {
                 "issues": "https://github.com/bobthecow/psysh/issues",
+<<<<<<< HEAD
                 "source": "https://github.com/bobthecow/psysh/tree/v0.12.24"
             },
             "time": "2026-06-29T15:41:09+00:00"
+=======
+                "source": "https://github.com/bobthecow/psysh/tree/v0.12.23"
+            },
+            "time": "2026-05-23T13:41:31+00:00"
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
         },
         {
             "name": "ralouphie/getallheaders",
@@ -3578,6 +3735,7 @@
         },
         {
             "name": "symfony/console",
+<<<<<<< HEAD
             "version": "v7.4.14",
             "source": {
                 "type": "git",
@@ -3588,6 +3746,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/console/zipball/92f58bc4bf97a92ed1b9f367f0cd44f20bde0e87",
                 "reference": "92f58bc4bf97a92ed1b9f367f0cd44f20bde0e87",
+=======
+            "version": "v7.4.13",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/console.git",
+                "reference": "85095d2573eaefaf35e40b9513a9bf09f72cd217"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/console/zipball/85095d2573eaefaf35e40b9513a9bf09f72cd217",
+                "reference": "85095d2573eaefaf35e40b9513a9bf09f72cd217",
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
                 "shasum": ""
             },
             "require": {
@@ -3652,7 +3822,11 @@
                 "terminal"
             ],
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/console/tree/v7.4.14"
+=======
+                "source": "https://github.com/symfony/console/tree/v7.4.13"
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
             },
             "funding": [
                 {
@@ -3672,7 +3846,11 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2026-06-16T11:50:14+00:00"
+=======
+            "time": "2026-05-24T08:56:14+00:00"
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
         },
         {
             "name": "symfony/css-selector",
@@ -3745,6 +3923,7 @@
         },
         {
             "name": "symfony/deprecation-contracts",
+<<<<<<< HEAD
             "version": "v3.7.1",
             "source": {
                 "type": "git",
@@ -3755,6 +3934,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/f3202fa1b5097b0af062dc978b32ecf63404e31d",
                 "reference": "f3202fa1b5097b0af062dc978b32ecf63404e31d",
+=======
+            "version": "v3.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/deprecation-contracts.git",
+                "reference": "50f59d1f3ca46d41ac911f97a78626b6756af35b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/50f59d1f3ca46d41ac911f97a78626b6756af35b",
+                "reference": "50f59d1f3ca46d41ac911f97a78626b6756af35b",
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
                 "shasum": ""
             },
             "require": {
@@ -3792,7 +3983,11 @@
             "description": "A generic function and convention to trigger deprecation notices",
             "homepage": "https://symfony.com",
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/deprecation-contracts/tree/v3.7.1"
+=======
+                "source": "https://github.com/symfony/deprecation-contracts/tree/v3.7.0"
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
             },
             "funding": [
                 {
@@ -3812,7 +4007,11 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2026-06-05T06:23:12+00:00"
+=======
+            "time": "2026-04-13T15:52:40+00:00"
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
         },
         {
             "name": "symfony/error-handler",
@@ -3898,6 +4097,7 @@
         },
         {
             "name": "symfony/event-dispatcher",
+<<<<<<< HEAD
             "version": "v7.4.14",
             "source": {
                 "type": "git",
@@ -3908,6 +4108,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/51fe3d170227be8d1772214b82ae506e15ed78ff",
                 "reference": "51fe3d170227be8d1772214b82ae506e15ed78ff",
+=======
+            "version": "v7.4.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/event-dispatcher.git",
+                "reference": "e4a2e29753c7801f7a8340e066cfa788f3bc8101"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/e4a2e29753c7801f7a8340e066cfa788f3bc8101",
+                "reference": "e4a2e29753c7801f7a8340e066cfa788f3bc8101",
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
                 "shasum": ""
             },
             "require": {
@@ -3959,7 +4171,11 @@
             "description": "Provides tools that allow your application components to communicate with each other by dispatching events and listening to them",
             "homepage": "https://symfony.com",
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/event-dispatcher/tree/v7.4.14"
+=======
+                "source": "https://github.com/symfony/event-dispatcher/tree/v7.4.9"
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
             },
             "funding": [
                 {
@@ -3979,6 +4195,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2026-06-06T11:10:32+00:00"
         },
         {
@@ -3993,6 +4210,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/event-dispatcher-contracts/zipball/c7de7a00ffb67842132da02ea92988a39ccd9f4e",
                 "reference": "c7de7a00ffb67842132da02ea92988a39ccd9f4e",
+=======
+            "time": "2026-04-18T13:18:21+00:00"
+        },
+        {
+            "name": "symfony/event-dispatcher-contracts",
+            "version": "v3.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/event-dispatcher-contracts.git",
+                "reference": "ccba7060602b7fed0b03c85bf025257f76d9ef32"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher-contracts/zipball/ccba7060602b7fed0b03c85bf025257f76d9ef32",
+                "reference": "ccba7060602b7fed0b03c85bf025257f76d9ef32",
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
                 "shasum": ""
             },
             "require": {
@@ -4039,7 +4272,11 @@
                 "standards"
             ],
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/event-dispatcher-contracts/tree/v3.7.1"
+=======
+                "source": "https://github.com/symfony/event-dispatcher-contracts/tree/v3.7.0"
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
             },
             "funding": [
                 {
@@ -4059,7 +4296,11 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2026-06-05T06:23:12+00:00"
+=======
+            "time": "2026-01-05T13:30:16+00:00"
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
         },
         {
             "name": "symfony/finder",
@@ -4131,6 +4372,7 @@
         },
         {
             "name": "symfony/http-foundation",
+<<<<<<< HEAD
             "version": "v7.4.14",
             "source": {
                 "type": "git",
@@ -4141,6 +4383,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/http-foundation/zipball/06db5ae1552177bf8572f8908839f12e3c06aed3",
                 "reference": "06db5ae1552177bf8572f8908839f12e3c06aed3",
+=======
+            "version": "v7.4.13",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/http-foundation.git",
+                "reference": "bc354f47c62301e990b7874fa662326368508e2c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/bc354f47c62301e990b7874fa662326368508e2c",
+                "reference": "bc354f47c62301e990b7874fa662326368508e2c",
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
                 "shasum": ""
             },
             "require": {
@@ -4189,7 +4443,11 @@
             "description": "Defines an object-oriented layer for the HTTP specification",
             "homepage": "https://symfony.com",
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/http-foundation/tree/v7.4.14"
+=======
+                "source": "https://github.com/symfony/http-foundation/tree/v7.4.13"
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
             },
             "funding": [
                 {
@@ -4209,6 +4467,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2026-06-11T07:31:44+00:00"
         },
         {
@@ -4223,6 +4482,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/http-kernel/zipball/e99af79b1e776646eda0e1c23b7b45c184ff99be",
                 "reference": "e99af79b1e776646eda0e1c23b7b45c184ff99be",
+=======
+            "time": "2026-05-24T11:20:33+00:00"
+        },
+        {
+            "name": "symfony/http-kernel",
+            "version": "v7.4.13",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/http-kernel.git",
+                "reference": "9df847980c436451f4f51d1284491bb4356dd989"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/9df847980c436451f4f51d1284491bb4356dd989",
+                "reference": "9df847980c436451f4f51d1284491bb4356dd989",
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
                 "shasum": ""
             },
             "require": {
@@ -4308,7 +4583,11 @@
             "description": "Provides a structured process for converting a Request into a Response",
             "homepage": "https://symfony.com",
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/http-kernel/tree/v7.4.14"
+=======
+                "source": "https://github.com/symfony/http-kernel/tree/v7.4.13"
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
             },
             "funding": [
                 {
@@ -4328,6 +4607,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2026-06-27T09:14:35+00:00"
         },
         {
@@ -4342,6 +4622,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/mailer/zipball/f88ce03ae73e3edb5c176ce1f337709996e88495",
                 "reference": "f88ce03ae73e3edb5c176ce1f337709996e88495",
+=======
+            "time": "2026-05-27T08:31:43+00:00"
+        },
+        {
+            "name": "symfony/mailer",
+            "version": "v7.4.12",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/mailer.git",
+                "reference": "5cefb712a25f320579615ba9e1942abaeade7dff"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/mailer/zipball/5cefb712a25f320579615ba9e1942abaeade7dff",
+                "reference": "5cefb712a25f320579615ba9e1942abaeade7dff",
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
                 "shasum": ""
             },
             "require": {
@@ -4392,7 +4688,11 @@
             "description": "Helps sending emails",
             "homepage": "https://symfony.com",
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/mailer/tree/v7.4.14"
+=======
+                "source": "https://github.com/symfony/mailer/tree/v7.4.12"
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
             },
             "funding": [
                 {
@@ -4412,7 +4712,11 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2026-06-13T08:51:35+00:00"
+=======
+            "time": "2026-05-20T07:20:23+00:00"
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
         },
         {
             "name": "symfony/mime",
@@ -5484,6 +5788,7 @@
         },
         {
             "name": "symfony/service-contracts",
+<<<<<<< HEAD
             "version": "v3.7.1",
             "source": {
                 "type": "git",
@@ -5494,6 +5799,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/service-contracts/zipball/c0a284bab1ed8aa0417e3d69250ab437739563a0",
                 "reference": "c0a284bab1ed8aa0417e3d69250ab437739563a0",
+=======
+            "version": "v3.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/service-contracts.git",
+                "reference": "d25d82433a80eba6aa0e6c24b61d7370d99e444a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/service-contracts/zipball/d25d82433a80eba6aa0e6c24b61d7370d99e444a",
+                "reference": "d25d82433a80eba6aa0e6c24b61d7370d99e444a",
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
                 "shasum": ""
             },
             "require": {
@@ -5547,7 +5864,11 @@
                 "standards"
             ],
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/service-contracts/tree/v3.7.1"
+=======
+                "source": "https://github.com/symfony/service-contracts/tree/v3.7.0"
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
             },
             "funding": [
                 {
@@ -5567,7 +5888,11 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2026-06-16T09:55:08+00:00"
+=======
+            "time": "2026-03-28T09:44:51+00:00"
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
         },
         {
             "name": "symfony/string",
@@ -5662,6 +5987,7 @@
         },
         {
             "name": "symfony/translation",
+<<<<<<< HEAD
             "version": "v7.4.14",
             "source": {
                 "type": "git",
@@ -5672,6 +5998,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/translation/zipball/a1af4dacb24eb7ef4f1ca71b94da8ddbce572281",
                 "reference": "a1af4dacb24eb7ef4f1ca71b94da8ddbce572281",
+=======
+            "version": "v7.4.10",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/translation.git",
+                "reference": "ada7578c30dd5feaa8259cff3e885069ea81ddde"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/translation/zipball/ada7578c30dd5feaa8259cff3e885069ea81ddde",
+                "reference": "ada7578c30dd5feaa8259cff3e885069ea81ddde",
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
                 "shasum": ""
             },
             "require": {
@@ -5738,7 +6076,11 @@
             "description": "Provides tools to internationalize your application",
             "homepage": "https://symfony.com",
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/translation/tree/v7.4.14"
+=======
+                "source": "https://github.com/symfony/translation/tree/v7.4.10"
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
             },
             "funding": [
                 {
@@ -5758,6 +6100,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2026-06-06T09:33:19+00:00"
         },
         {
@@ -5772,6 +6115,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/translation-contracts/zipball/ccb206b98faccc511ebae8e5fad50f2dc0b30621",
                 "reference": "ccb206b98faccc511ebae8e5fad50f2dc0b30621",
+=======
+            "time": "2026-05-06T11:19:24+00:00"
+        },
+        {
+            "name": "symfony/translation-contracts",
+            "version": "v3.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/translation-contracts.git",
+                "reference": "0ab302977a952b42fd51475c4ebac81f8da0a95d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/translation-contracts/zipball/0ab302977a952b42fd51475c4ebac81f8da0a95d",
+                "reference": "0ab302977a952b42fd51475c4ebac81f8da0a95d",
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
                 "shasum": ""
             },
             "require": {
@@ -5820,7 +6179,11 @@
                 "standards"
             ],
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/translation-contracts/tree/v3.7.1"
+=======
+                "source": "https://github.com/symfony/translation-contracts/tree/v3.7.0"
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
             },
             "funding": [
                 {
@@ -5840,7 +6203,11 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2026-06-05T06:23:12+00:00"
+=======
+            "time": "2026-01-05T13:30:16+00:00"
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
         },
         {
             "name": "symfony/uid",
@@ -6980,6 +7347,7 @@
         },
         {
             "name": "laravel/sail",
+<<<<<<< HEAD
             "version": "v1.63.0",
             "source": {
                 "type": "git",
@@ -6990,6 +7358,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/laravel/sail/zipball/51bbce3f803c1d386cabbb44e618c955a12ff5fc",
                 "reference": "51bbce3f803c1d386cabbb44e618c955a12ff5fc",
+=======
+            "version": "v1.62.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/sail.git",
+                "reference": "3aaeefc979f8ba6586fbc5b6e0b1b3638058f98e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/sail/zipball/3aaeefc979f8ba6586fbc5b6e0b1b3638058f98e",
+                "reference": "3aaeefc979f8ba6586fbc5b6e0b1b3638058f98e",
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
                 "shasum": ""
             },
             "require": {
@@ -7039,7 +7419,11 @@
                 "issues": "https://github.com/laravel/sail/issues",
                 "source": "https://github.com/laravel/sail"
             },
+<<<<<<< HEAD
             "time": "2026-06-18T08:54:14+00:00"
+=======
+            "time": "2026-05-27T04:02:01+00:00"
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
         },
         {
             "name": "mockery/mockery",
@@ -7400,11 +7784,19 @@
         },
         {
             "name": "phpstan/phpstan",
+<<<<<<< HEAD
             "version": "2.2.5",
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/phpstan/phpstan/zipball/909c1e5fef7989ac0d0c1c5c42e32a5c4f6198a0",
                 "reference": "909c1e5fef7989ac0d0c1c5c42e32a5c4f6198a0",
+=======
+            "version": "2.2.2",
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/e5cc34d491a90e79c216d824f60fe21fd4d93bd6",
+                "reference": "e5cc34d491a90e79c216d824f60fe21fd4d93bd6",
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
                 "shasum": ""
             },
             "require": {
@@ -7460,7 +7852,11 @@
                     "type": "github"
                 }
             ],
+<<<<<<< HEAD
             "time": "2026-07-05T06:31:06+00:00"
+=======
+            "time": "2026-06-05T09:00:01+00:00"
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -8943,6 +9339,7 @@
         },
         {
             "name": "symfony/yaml",
+<<<<<<< HEAD
             "version": "v7.4.14",
             "source": {
                 "type": "git",
@@ -8953,6 +9350,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/yaml/zipball/f8f328665ace2370d1e10645b807ba1646dc7dcc",
                 "reference": "f8f328665ace2370d1e10645b807ba1646dc7dcc",
+=======
+            "version": "v7.4.13",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/yaml.git",
+                "reference": "a7ec3b1156faf8815db7683ec7c1e7338e6f977c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/a7ec3b1156faf8815db7683ec7c1e7338e6f977c",
+                "reference": "a7ec3b1156faf8815db7683ec7c1e7338e6f977c",
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
                 "shasum": ""
             },
             "require": {
@@ -8995,7 +9404,11 @@
             "description": "Loads and dumps YAML files",
             "homepage": "https://symfony.com",
             "support": {
+<<<<<<< HEAD
                 "source": "https://github.com/symfony/yaml/tree/v7.4.14"
+=======
+                "source": "https://github.com/symfony/yaml/tree/v7.4.13"
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
             },
             "funding": [
                 {
@@ -9015,7 +9428,11 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
             "time": "2026-06-08T20:24:16+00:00"
+=======
+            "time": "2026-05-25T06:06:12+00:00"
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
         },
         {
             "name": "theseer/tokenizer",
