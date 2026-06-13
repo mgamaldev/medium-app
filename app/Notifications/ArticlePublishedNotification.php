@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Models\Article;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
@@ -13,7 +14,7 @@ class ArticlePublishedNotification extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct(public Article $article)
     {
         //
     }
