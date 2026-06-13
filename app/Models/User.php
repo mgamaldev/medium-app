@@ -7,7 +7,10 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+<<<<<<< HEAD
 use Illuminate\Support\Facades\DB;
+=======
+>>>>>>> e285830 (Fix: solve comments and add sanctum library)
 use Laravel\Sanctum\HasApiTokens;
 
 /**
