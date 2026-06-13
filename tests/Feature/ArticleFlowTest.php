@@ -8,9 +8,9 @@ use App\Models\User;
 use App\Notifications\ArticlePublishedNotification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
+use Laravel\Sanctum\Sanctum;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
-use Laravel\Sanctum\Sanctum;
 
 class ArticleFlowTest extends TestCase
 {
