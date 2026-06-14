@@ -37,6 +37,8 @@ class UserFollowTest extends TestCase
     {
         $user = User::factory()->create();
         $follower = User::factory()->create();
+
+        $follower->follow($user);
         $follower->follow($user);
 
         $this->assertDatabaseCount('user_follower', 1);
