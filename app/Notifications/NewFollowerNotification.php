@@ -2,31 +2,22 @@
 
 namespace App\Notifications;
 
-use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
-use Throwable;
 
 class NewFollowerNotification extends Notification implements ShouldQueue
 {
-    use Queueable, SerializesModels;
+    use Queueable;
 
-    public $tries = 3;
-
-    public $backoff = [10, 30, 60];
-
-    public function viaQueues(object $notifiable): array
+    /**
+     * Create a new notification instance.
+     */
+    public function __construct()
     {
-        return [
-            'mail' => 'notifications',
-        ];
+        //
     }
-
-    public function __construct(public User $user, public User $follower) {}
 
     /**
      * Get the notification's delivery channels.
@@ -44,7 +35,9 @@ class NewFollowerNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->line("You got a new follower {$this->follower->username}");
+            ->line('The introduction to the notification.')
+            ->action('Notification Action', url('/'))
+            ->line('Thank you for using our application!');
     }
 
     /**
@@ -57,15 +50,5 @@ class NewFollowerNotification extends Notification implements ShouldQueue
         return [
             //
         ];
-    }
-
-    public function failed(Throwable $exception): void
-    {
-        Log::error('New follower notification failed permanently', [
-            'job' => static::class,
-            'user_id' => $this->user->id,
-            'exception' => $exception->getMessage(),
-            'trace' => substr($exception->getTraceAsString(), 0, 500),
-        ]);
     }
 }
