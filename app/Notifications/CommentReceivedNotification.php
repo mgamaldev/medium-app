@@ -2,36 +2,22 @@
 
 namespace App\Notifications;
 
-use App\Models\Comment;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
-use Throwable;
 
 class CommentReceivedNotification extends Notification implements ShouldQueue
 {
-    use Queueable, SerializesModels;
-
-    public $tries = 3;
-
-    public $backoff = [10, 30, 60];
+    use Queueable;
 
     /**
-     * Get the queue connections for each channel.
-     *
-     * @return array<string, string>
+     * Create a new notification instance.
      */
-    public function viaQueues(): array
+    public function __construct()
     {
-        return [
-            'mail' => 'notifications',
-        ];
+        //
     }
-
-    public function __construct(public Comment $comment) {}
 
     /**
      * Get the notification's delivery channels.
@@ -49,7 +35,9 @@ class CommentReceivedNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->line("{$this->comment->user->username} add new comment: {$this->comment->body} at this article {$this->comment->article->title}");
+            ->line('The introduction to the notification.')
+            ->action('Notification Action', url('/'))
+            ->line('Thank you for using our application!');
     }
 
     /**
@@ -62,15 +50,5 @@ class CommentReceivedNotification extends Notification implements ShouldQueue
         return [
             //
         ];
-    }
-
-    public function failed(Throwable $exception): void
-    {
-        Log::error('Comment received notification failed permanently', [
-            'job' => static::class,
-            'user_id' => $this->comment->user_id,
-            'exception' => $exception->getMessage(),
-            'trace' => substr($exception->getTraceAsString(), 0, 500),
-        ]);
     }
 }
