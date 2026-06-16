@@ -2,23 +2,19 @@
 
 namespace App\Notifications;
 
-use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Queue\SerializesModels;
 
 class NewFollowerNotification extends Notification implements ShouldQueue
 {
-    use Queueable, SerializesModels;
+    use Queueable;
 
-    public function viaQueue(object $notifiable): string
-    {
-        return 'notifications';
-    }
-
-    public function __construct(public User $follower)
+    /**
+     * Create a new notification instance.
+     */
+    public function __construct()
     {
         //
     }
@@ -39,7 +35,9 @@ class NewFollowerNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->line("You got a new follower {$this->follower->username}");
+            ->line('The introduction to the notification.')
+            ->action('Notification Action', url('/'))
+            ->line('Thank you for using our application!');
     }
 
     /**
