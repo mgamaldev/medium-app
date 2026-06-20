@@ -2,9 +2,7 @@
 
 namespace App\Notifications;
 
-use App\Models\Article;
 use App\Models\Comment;
-use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -15,10 +13,12 @@ class CommentReceivedNotification extends Notification implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    /**
-     * Create a new notification instance.
-     */
-    public function __construct(public Comment $comment){}
+    public function viaQueue(object $notifiable): string
+    {
+        return 'notifications';
+    }
+
+    public function __construct(public Comment $comment) {}
 
     /**
      * Get the notification's delivery channels.
@@ -39,6 +39,7 @@ class CommentReceivedNotification extends Notification implements ShouldQueue
             ->line("{$this->comment->user->username} add new comment: {$this->comment->body}
              at this article {$this->comment->article->title}");
     }
+
     /**
      * Get the array representation of the notification.
      *

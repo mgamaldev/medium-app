@@ -13,9 +13,11 @@ class ArticlePublishedNotification extends Notification implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    /**
-     * Create a new notification instance.
-     */
+    public function viaQueue(object $notifiable): string
+    {
+        return 'notifications';
+    }
+
     public function __construct(public Article $article)
     {
         //
