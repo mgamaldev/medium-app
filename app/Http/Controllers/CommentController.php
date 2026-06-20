@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
-use App\Models\Comment;
-use App\Models\User;
 use App\Notifications\CommentReceivedNotification;
 use Illuminate\Http\Request;
 
@@ -18,10 +16,8 @@ class CommentController extends Controller
 
         $validateComment['user_id'] = $request->user()->id;
 
-        /** @var Comment $comment */
         $comment = $article->comments()->create($validateComment);
 
-        /** @var User $recipient */
         $recipient = $article->user;
 
         $recipient->notify(new CommentReceivedNotification($comment));

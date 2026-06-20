@@ -13,7 +13,11 @@ class NewFollowerNotification extends Notification implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    
+    public function viaQueue(object $notifiable): string
+    {
+        return 'notifications';
+    }
+
     public function __construct(public User $follower)
     {
         //

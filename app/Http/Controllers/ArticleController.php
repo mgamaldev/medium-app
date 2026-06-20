@@ -10,7 +10,6 @@ use App\Repositories\Contracts\ArticleRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Notification;
 
 class ArticleController extends Controller
 {
@@ -54,7 +53,9 @@ class ArticleController extends Controller
 
         $followers = $author->followers()->get();
 
-        Notification::send($followers, new ArticlePublishedNotification($article));
+        foreach ($followers as $recipient) {
+            $recipient->notify(new ArticlePublishedNotification($article));
+        }
 
         return response()->json([
             'message' => 'Article published successfully',
