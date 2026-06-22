@@ -25,6 +25,7 @@ class ArticleVisibilityTest extends TestCase
         $this->policy = $this->app->make(ArticlePolicy::class);
 
     }
+    
 
     #[Test]
     public function guest_user_can_view_published_article()
@@ -62,6 +63,40 @@ class ArticleVisibilityTest extends TestCase
         ]);
 
         $result = $this->policy->view($user, $article);
+
+        $this->assertTrue($result);
+    }
+
+    #[Test]
+    public function guest_user_cannot_view_archived_article()
+    {
+        $article = Article::factory()->create(['status' => ArticleStatus::ARCHIVED]);
+
+        $result = $this->policy->view(null, $article);
+
+        $this->assertFalse($result);
+    }
+
+    #[Test]
+    public function authenticated_user_cannot_view_archived_article()
+    {
+        $user = User::factory()->create();
+
+        $article = Article::factory()->create(['status' => ArticleStatus::ARCHIVED]);
+
+        $result = $this->policy->view($user, $article);
+
+        $this->assertFalse($result);
+    }
+
+    #[Test]
+    public function author_can_view_archived_article()
+    {
+        $author = User::factory()->create();
+
+        $article = Article::factory()->create(['status' => ArticleStatus::ARCHIVED, 'user_id' => $author->id]);
+
+        $result = $this->policy->view($author, $article);
 
         $this->assertTrue($result);
     }
@@ -129,5 +164,35 @@ class ArticleVisibilityTest extends TestCase
 
         $this->assertFalse($result);
 
+    }
+
+    #[Test]
+    public function author_can_view_followers_only_article()
+    {
+        $author = User::factory()->create();
+
+        $article = Article::factory()->create([
+            'status' => ArticleStatus::PUBLISHED,
+            'visibility' => ArticleVisibility::FOLLOWERS_ONLY,
+            'user_id' => $author->id]);
+
+        $result = $this->policy->view($author, $article);
+
+        $this->assertTrue($result);
+    }
+
+    #[Test]
+    public function non_author_cannot_view_followers_only_article()
+    {
+        $strangeUser = User::factory()->create();
+
+        $article = Article::factory()->create([
+            'status' => ArticleStatus::PUBLISHED,
+            'visibility' => ArticleVisibility::FOLLOWERS_ONLY,
+        ]);
+
+        $result = $this->policy->view($strangeUser, $article);
+
+        $this->assertFalse($result);
     }
 }
