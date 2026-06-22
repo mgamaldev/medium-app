@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 
 class ReadTimeTest extends TestCase
 {
-
     public function test_it_can_be_instantiated_with_valid_reading_time()
     {
         $readTime = 5;

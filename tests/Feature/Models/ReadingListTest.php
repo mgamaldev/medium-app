@@ -2,17 +2,14 @@
 
 namespace Tests\Feature\Models;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\Article;
 use App\Models\ReadingList;
-use Illuminate\Foundation\Auth\User as AuthUser;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class ReadingListTest extends TestCase
 {
-
     use RefreshDatabase;
 
     public function test_reading_list_belongs_to_a_user()
@@ -28,11 +25,12 @@ class ReadingListTest extends TestCase
         $this->assertEquals($user->id, $relatedUser->id);
 
     }
+
     public function test_reading_list_belongs_to_many_articles()
     {
         $user = User::factory()->create();
         $article1 = Article::factory()->create();
-        $article2 = Article::factory()->create();      
+        $article2 = Article::factory()->create();
 
         $readingList = ReadingList::create([
             'user_id' => $user->id,

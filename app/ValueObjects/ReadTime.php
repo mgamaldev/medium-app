@@ -8,9 +8,7 @@ class ReadTime
     {
         if ($readTime < 0) {
             throw new \Exception("read time shouldn't be less than 0");
-        }
-        elseif($readTime === 0)
-        {
+        } elseif ($readTime === 0) {
             throw new \Exception("read time shouldn't be equal 0");
         }
     }

@@ -6,13 +6,12 @@ use App\Models\Article;
 use App\Models\Comment;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class CommentTest extends TestCase
 {
     use RefreshDatabase;
-    
+
     public function test_comment_belongs_to_a_user()
     {
         $user = User::factory()->create();
@@ -21,7 +20,7 @@ class CommentTest extends TestCase
         $comment = Comment::create([
             'user_id' => $user->id,
             'article_id' => $article->id,
-            'body' => 'Test Comment'
+            'body' => 'Test Comment',
         ]);
 
         $relatedUser = $comment->user;
@@ -29,6 +28,7 @@ class CommentTest extends TestCase
         $this->assertInstanceOf(User::class, $relatedUser);
         $this->assertEquals($user->id, $relatedUser->id);
     }
+
     public function test_comment_belongs_to_an_article()
     {
         $user = User::factory()->create();
@@ -37,13 +37,13 @@ class CommentTest extends TestCase
         $comment = Comment::create([
             'user_id' => $user->id,
             'article_id' => $article->id,
-            'body' => 'Test Comment'
+            'body' => 'Test Comment',
         ]);
 
         $relatedArticle = $comment->article;
 
         $this->assertInstanceOf(Article::class, $relatedArticle);
-        $this->assertEquals($article->id,$relatedArticle->id);
+        $this->assertEquals($article->id, $relatedArticle->id);
 
     }
 }

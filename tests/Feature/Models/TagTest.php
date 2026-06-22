@@ -2,11 +2,10 @@
 
 namespace Tests\Feature\Models;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use App\Models\Tag;
 use App\Models\Article;
+use App\Models\Tag;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class TagTest extends TestCase
 {
@@ -21,7 +20,7 @@ class TagTest extends TestCase
 
         $article1 = Article::factory()->create();
         $article2 = Article::factory()->create();
-        
+
         $tag->articles()->attach($article1);
         $tag->articles()->attach($article2);
 

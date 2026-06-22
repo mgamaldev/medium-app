@@ -20,5 +20,4 @@ class ReadingList extends Model
     {
         return $this->belongsToMany(Article::class);
     }
-
 }

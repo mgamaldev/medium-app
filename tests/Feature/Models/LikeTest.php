@@ -6,8 +6,8 @@ use App\Models\Article;
 use App\Models\Like;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+
 class LikeTest extends TestCase
 {
     use RefreshDatabase;
@@ -27,11 +27,12 @@ class LikeTest extends TestCase
         $this->assertInstanceOf(User::class, $relatedUser);
         $this->assertEquals($user->id, $relatedUser->id);
     }
+
     public function test_like_belongs_to_an_article()
     {
         $user = User::factory()->create();
         $article1 = Article::factory()->create();
-        $article2 = Article::factory()->create();      
+        $article2 = Article::factory()->create();
 
         $like = Like::create([
             'user_id' => $user->id,
