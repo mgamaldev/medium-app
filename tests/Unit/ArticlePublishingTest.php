@@ -74,5 +74,4 @@ class ArticlePublishingTest extends TestCase
             return $event->article->id === $article->id;
         });
     }
-    
 }

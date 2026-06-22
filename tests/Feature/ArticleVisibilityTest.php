@@ -25,7 +25,6 @@ class ArticleVisibilityTest extends TestCase
         $this->policy = $this->app->make(ArticlePolicy::class);
 
     }
-    
 
     #[Test]
     public function guest_user_can_view_published_article()
