@@ -9,7 +9,7 @@ class ReadingList extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title'];
+    protected $fillable = ['user_id', 'title'];
 
     public function user()
     {
@@ -20,4 +20,5 @@ class ReadingList extends Model
     {
         return $this->belongsToMany(Article::class);
     }
+
 }
