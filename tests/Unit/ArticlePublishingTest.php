@@ -6,6 +6,7 @@ use App\Enums\ArticleStatus;
 use App\Events\ArticlePublished;
 use App\Models\Article;
 use App\Models\User;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
@@ -73,5 +74,17 @@ class ArticlePublishingTest extends TestCase
         Event::assertDispatched(ArticlePublished::class, function ($event) use ($article) {
             return $event->article->id === $article->id;
         });
+    }
+
+    public function test_article_published_event_has_correct_broadcast_channels(): void
+    {
+        $article = Article::factory()->create();
+
+        $channels = (new ArticlePublished($article))->broadcastOn();
+
+        $this->assertCount(1, $channels);
+        $this->assertInstanceOf(PrivateChannel::class, $channels[0]);
+        $this->assertEquals('private-channel-name', $channels[0]->name);
+
     }
 }
