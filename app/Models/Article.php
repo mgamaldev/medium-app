@@ -5,11 +5,13 @@ namespace App\Models;
 use App\Builders\ArticleQueryBuilder;
 use App\Enums\ArticleStatus;
 use App\Enums\ArticleVisibility;
+use App\Events\ArticlePublished;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use InvalidArgumentException;
 
 /**
  * @property ArticleStatus $status
@@ -66,11 +68,19 @@ class Article extends Model
     {
 
         if (empty($this->body)) {
+<<<<<<< HEAD
             throw new \Exception('Body is required');
         }
 
         if ($this->status === ArticleStatus::PUBLISHED) {
             throw new \Exception('Article is already published');
+=======
+            throw new InvalidArgumentException('Body is required');
+        }
+
+        if ($this->status === ArticleStatus::PUBLISHED) {
+            throw new InvalidArgumentException('Article is already published');
+>>>>>>> d1e2bb5de977880b6d321cacedc8dfc91b2c5491
         }
 
         $this->update([
@@ -78,5 +88,10 @@ class Article extends Model
             'published_at' => now(),
         ]);
 
+<<<<<<< HEAD
+=======
+        ArticlePublished::dispatch($this);
+
+>>>>>>> d1e2bb5de977880b6d321cacedc8dfc91b2c5491
     }
 }

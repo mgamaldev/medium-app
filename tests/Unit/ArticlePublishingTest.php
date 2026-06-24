@@ -3,10 +3,11 @@
 namespace Tests\Unit;
 
 use App\Enums\ArticleStatus;
+use App\Events\ArticlePublished;
 use App\Models\Article;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class ArticlePublishingTest extends TestCase
@@ -54,7 +55,7 @@ class ArticlePublishingTest extends TestCase
 
     public function test_publishing_an_article_triggers_email_notification(): void
     {
-        Mail::fake();
+        Event::fake([ArticlePublished::class]);
 
         $author = User::factory()->create();
         $follower = User::factory()->create();
@@ -69,5 +70,8 @@ class ArticlePublishingTest extends TestCase
 
         $article->publish();
 
+        Event::assertDispatched(ArticlePublished::class, function ($event) use ($article) {
+            return $event->article->id === $article->id;
+        });
     }
 }

@@ -9,6 +9,7 @@ use App\Notifications\ArticlePublishedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Notification;
 
 class ArticleController extends Controller
 {
@@ -52,9 +53,7 @@ class ArticleController extends Controller
 
         $followers = $author->followers()->get();
 
-        foreach ($followers as $recipient) {
-            $recipient->notify(new ArticlePublishedNotification($article));
-        }
+        Notification::send($followers, new ArticlePublishedNotification($article));
 
         return response()->json([
             'message' => 'Article published successfully',
