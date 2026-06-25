@@ -644,6 +644,7 @@
         {
             "name": "guzzlehttp/guzzle",
 <<<<<<< HEAD
+<<<<<<< HEAD
             "version": "7.13.2",
             "source": {
                 "type": "git",
@@ -656,21 +657,30 @@
                 "reference": "bcd989ad36c92d42a3715379af91f2defee5b8dd",
 =======
             "version": "7.11.1",
+=======
+            "version": "7.12.3",
+>>>>>>> c74e9d5 (add comments api route)
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "5af96f374e0ab4ebd747b8310888c99d3adb0a8c"
+                "reference": "9aa17bcdd777ee31df9fc83c337ca4ca2340def3"
             },
             "dist": {
                 "type": "zip",
+<<<<<<< HEAD
                 "url": "https://api.github.com/repos/guzzle/guzzle/zipball/5af96f374e0ab4ebd747b8310888c99d3adb0a8c",
                 "reference": "5af96f374e0ab4ebd747b8310888c99d3adb0a8c",
 >>>>>>> e285830 (Fix: solve comments and add sanctum library)
+=======
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/9aa17bcdd777ee31df9fc83c337ca4ca2340def3",
+                "reference": "9aa17bcdd777ee31df9fc83c337ca4ca2340def3",
+>>>>>>> c74e9d5 (add comments api route)
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "guzzlehttp/promises": "^2.5",
+<<<<<<< HEAD
 <<<<<<< HEAD
                 "guzzlehttp/psr7": "^2.12.3",
                 "php": "^7.2.5 || ^8.0",
@@ -684,6 +694,13 @@
                 "symfony/deprecation-contracts": "^2.5 || ^3.0",
                 "symfony/polyfill-php80": "^1.24"
 >>>>>>> e285830 (Fix: solve comments and add sanctum library)
+=======
+                "guzzlehttp/psr7": "^2.12.3",
+                "php": "^7.2.5 || ^8.0",
+                "psr/http-client": "^1.0",
+                "symfony/deprecation-contracts": "^2.5 || ^3.0",
+                "symfony/polyfill-php80": "^1.25"
+>>>>>>> c74e9d5 (add comments api route)
             },
             "provide": {
                 "psr/http-client-implementation": "1.0"
@@ -696,8 +713,12 @@
                 "guzzlehttp/test-server": "^0.6",
 =======
                 "guzzle/client-integration-tests": "3.0.2",
+<<<<<<< HEAD
                 "guzzlehttp/test-server": "^0.5",
 >>>>>>> e285830 (Fix: solve comments and add sanctum library)
+=======
+                "guzzlehttp/test-server": "^0.5.1",
+>>>>>>> c74e9d5 (add comments api route)
                 "php-http/message-factory": "^1.1",
                 "phpunit/phpunit": "^8.5.52 || ^9.6.34",
                 "psr/log": "^1.1 || ^2.0 || ^3.0"
@@ -778,10 +799,14 @@
             "support": {
                 "issues": "https://github.com/guzzle/guzzle/issues",
 <<<<<<< HEAD
+<<<<<<< HEAD
                 "source": "https://github.com/guzzle/guzzle/tree/7.13.2"
 =======
                 "source": "https://github.com/guzzle/guzzle/tree/7.11.1"
 >>>>>>> e285830 (Fix: solve comments and add sanctum library)
+=======
+                "source": "https://github.com/guzzle/guzzle/tree/7.12.3"
+>>>>>>> c74e9d5 (add comments api route)
             },
             "funding": [
                 {
@@ -798,10 +823,14 @@
                 }
             ],
 <<<<<<< HEAD
+<<<<<<< HEAD
             "time": "2026-07-05T19:00:11+00:00"
 =======
             "time": "2026-06-07T22:54:06+00:00"
 >>>>>>> e285830 (Fix: solve comments and add sanctum library)
+=======
+            "time": "2026-06-23T15:29:02+00:00"
+>>>>>>> c74e9d5 (add comments api route)
         },
         {
             "name": "guzzlehttp/promises",
@@ -890,6 +919,7 @@
         {
             "name": "guzzlehttp/psr7",
 <<<<<<< HEAD
+<<<<<<< HEAD
             "version": "2.12.3",
             "source": {
                 "type": "git",
@@ -902,16 +932,24 @@
                 "reference": "7ec62dc3f44aa218487dbed81a9bf9bc647be55d",
 =======
             "version": "2.11.0",
+=======
+            "version": "2.12.3",
+>>>>>>> c74e9d5 (add comments api route)
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "bbb5e61349fa5cb822b3e87842b951088b76b81f"
+                "reference": "7ec62dc3f44aa218487dbed81a9bf9bc647be55d"
             },
             "dist": {
                 "type": "zip",
+<<<<<<< HEAD
                 "url": "https://api.github.com/repos/guzzle/psr7/zipball/bbb5e61349fa5cb822b3e87842b951088b76b81f",
                 "reference": "bbb5e61349fa5cb822b3e87842b951088b76b81f",
 >>>>>>> e285830 (Fix: solve comments and add sanctum library)
+=======
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/7ec62dc3f44aa218487dbed81a9bf9bc647be55d",
+                "reference": "7ec62dc3f44aa218487dbed81a9bf9bc647be55d",
+>>>>>>> c74e9d5 (add comments api route)
                 "shasum": ""
             },
             "require": {
@@ -921,10 +959,14 @@
                 "ralouphie/getallheaders": "^3.0",
                 "symfony/deprecation-contracts": "^2.5 || ^3.0",
 <<<<<<< HEAD
+<<<<<<< HEAD
                 "symfony/polyfill-php80": "^1.25"
 =======
                 "symfony/polyfill-php80": "^1.24"
 >>>>>>> e285830 (Fix: solve comments and add sanctum library)
+=======
+                "symfony/polyfill-php80": "^1.25"
+>>>>>>> c74e9d5 (add comments api route)
             },
             "provide": {
                 "psr/http-factory-implementation": "1.0",
@@ -1006,10 +1048,14 @@
             "support": {
                 "issues": "https://github.com/guzzle/psr7/issues",
 <<<<<<< HEAD
+<<<<<<< HEAD
                 "source": "https://github.com/guzzle/psr7/tree/2.12.3"
 =======
                 "source": "https://github.com/guzzle/psr7/tree/2.11.0"
 >>>>>>> e285830 (Fix: solve comments and add sanctum library)
+=======
+                "source": "https://github.com/guzzle/psr7/tree/2.12.3"
+>>>>>>> c74e9d5 (add comments api route)
             },
             "funding": [
                 {
@@ -1025,6 +1071,7 @@
                     "type": "tidelift"
                 }
             ],
+<<<<<<< HEAD
 <<<<<<< HEAD
             "time": "2026-06-23T15:21:08+00:00"
         },
@@ -1042,6 +1089,9 @@
                 "reference": "9c19128923b05a5d7355e5d2318d7808b7e33bbd",
 =======
             "time": "2026-06-02T12:30:48+00:00"
+=======
+            "time": "2026-06-23T15:21:08+00:00"
+>>>>>>> c74e9d5 (add comments api route)
         },
         {
             "name": "guzzlehttp/uri-template",
