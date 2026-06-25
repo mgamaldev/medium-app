@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use InvalidArgumentException;
 
 /**
  * @property ArticleStatus $status
@@ -67,17 +68,19 @@ class Article extends Model
     {
 
         if (empty($this->body)) {
-            throw new \Exception('Body is required');
+            throw new InvalidArgumentException('Body is required');
         }
 
         if ($this->status === ArticleStatus::PUBLISHED) {
-            throw new \Exception('Article is already published');
+            throw new InvalidArgumentException('Article is already published');
         }
 
         $this->update([
             'status' => ArticleStatus::PUBLISHED,
             'published_at' => now(),
         ]);
+
+        ArticlePublished::dispatch($this);
 
     }
 }
