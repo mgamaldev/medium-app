@@ -68,19 +68,11 @@ class Article extends Model
     {
 
         if (empty($this->body)) {
-<<<<<<< HEAD
-            throw new \Exception('Body is required');
-        }
-
-        if ($this->status === ArticleStatus::PUBLISHED) {
-            throw new \Exception('Article is already published');
-=======
             throw new InvalidArgumentException('Body is required');
         }
 
         if ($this->status === ArticleStatus::PUBLISHED) {
             throw new InvalidArgumentException('Article is already published');
->>>>>>> d1e2bb5de977880b6d321cacedc8dfc91b2c5491
         }
 
         $this->update([
@@ -88,10 +80,7 @@ class Article extends Model
             'published_at' => now(),
         ]);
 
-<<<<<<< HEAD
-=======
         ArticlePublished::dispatch($this);
 
->>>>>>> d1e2bb5de977880b6d321cacedc8dfc91b2c5491
     }
 }

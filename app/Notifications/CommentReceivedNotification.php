@@ -13,10 +13,18 @@ class CommentReceivedNotification extends Notification implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    public function viaQueue(object $notifiable): string
+    /**
+     * Get the queue connections for each channel.
+     *
+     * @return array<string, string>
+     */
+    public function viaQueues(): array
     {
-        return 'notifications';
+        return [
+            'mail' => 'notifications',
+        ];
     }
+
 
     public function __construct(public Comment $comment) {}
 
@@ -36,8 +44,7 @@ class CommentReceivedNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->line("{$this->comment->user->username} add new comment: {$this->comment->body}
-             at this article {$this->comment->article->title}");
+            ->line("{$this->comment->user->username} add new comment: {$this->comment->body} at this article {$this->comment->article->title}");
     }
 
     /**
