@@ -50,6 +50,43 @@ class ArticleRepositoryTest extends TestCase
     }
 
     #[Test]
+    public function can_find_an_article_by_id()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+
+        $article = Article::factory()->create(['user_id' => $user->id]);
+
+        $foundArticle = $this->repository->findById($article->id);
+
+        $this->assertInstanceOf(Article::class, $foundArticle);
+        $this->assertEquals($article->id, $foundArticle->id);
+    }
+
+    #[Test]
+    public function can_find_all_articles()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+        Article::factory()->create(['user_id' => $user->id]);
+        Article::factory()->create(['user_id' => $user->id]);
+        $articles = $this->repository->all();
+        $this->assertCount(2, $articles);
+    }
+
+    #[Test]
+    public function can_find_articles_by_author()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+        $article = Article::factory()->create(['user_id' => $user->id]);
+        $articles = $this->repository->getByAuthor($user->id);
+
+        $this->assertCount(1, $articles);
+        $this->assertEquals($article->id, $articles->first()->id);
+    }
+
+    #[Test]
     public function returns_only_published_articles()
     {
 

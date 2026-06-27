@@ -40,7 +40,7 @@ class ArticlePolicy
      */
     public function update(User $user, Article $article): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -48,7 +48,7 @@ class ArticlePolicy
      */
     public function delete(User $user, Article $article): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -56,7 +56,7 @@ class ArticlePolicy
      */
     public function restore(User $user, Article $article): bool
     {
-        return false;
+        return true;
     }
 
     /**

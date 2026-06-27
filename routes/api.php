@@ -15,3 +15,4 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 Route::post('/articles/{article}/publish', [ArticleController::class, 'publish']);
+Route::get('/articles/{article}', [ArticleController::class, 'show']);
