@@ -25,7 +25,6 @@ class CommentReceivedNotification extends Notification implements ShouldQueue
         ];
     }
 
-
     public function __construct(public Comment $comment) {}
 
     /**
