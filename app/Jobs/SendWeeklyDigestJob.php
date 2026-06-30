@@ -2,7 +2,10 @@
 
 namespace App\Jobs;
 
+<<<<<<< HEAD
 use App\Enums\ArticleStatus;
+=======
+>>>>>>> 4d4f3e1 (Add sendWeeklyDigestJob with all related functions and files)
 use App\Mail\WeeklyDigestMail;
 use App\Models\Article;
 use App\Models\User;
@@ -24,9 +27,7 @@ class SendWeeklyDigestJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $articles = Article::query()
-            ->where('published_at', '>=', now()->subDays(7))
-            ->where('status', ArticleStatus::PUBLISHED)
+        $articles = Article::query()->where('created_at', '>=', now()->subDays(7))
             ->orderByRaw('likes_count + comments_count desc')
             ->limit(5)
             ->get();
