@@ -7,6 +7,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 
 /**
@@ -76,5 +77,33 @@ class User extends Authenticatable
         $this->following()->detach($userToUnfollow->id);
 
         return $this;
+    }
+
+    public function feed()
+    {
+        $followedUserId = $this->following()->pluck('user_id');
+
+        return Article::query()->whereIn('user_id', $followedUserId)
+            ->where('status', ArticleStatus::PUBLISHED)
+            ->orderBy('published_at', 'desc')
+            ->get();
+    }
+
+    public function hasDigestBeenSent(string $weekOf)
+    {
+        return DB::table('digest_sends')
+            ->where('user_id', $this->id)
+            ->where('week_of', $weekOf)
+            ->exists();
+    }
+
+    public function recordDigestSend(string $weekOf)
+    {
+        return DB::table('digest_sends')->insert([
+            'user_id' => $this->id,
+            'week_of' => $weekOf,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 }
