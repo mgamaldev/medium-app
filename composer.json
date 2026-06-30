@@ -13,7 +13,7 @@
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
-        "larastan/larastan": "^3.9",
+        "larastan/larastan": "^3.10",
         "laravel/pail": "^1.2.2",
         "laravel/pint": "^1.24",
         "laravel/sail": "^1.41",
@@ -82,6 +82,7 @@
             "pestphp/pest-plugin": true,
             "php-http/discovery": true
         }
+        
     },
     "minimum-stability": "stable",
     "prefer-stable": true
