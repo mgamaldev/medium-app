@@ -9,3 +9,7 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Schedule::command('digests:dispatch')->weeklyOn(1, '09:00');
+
+Schedule::command('articles:trending')->dailyAt('02:00')->withoutOverlapping()->onOneServer();
+
+Schedule::command('drafts:cleanup')->weeklyOn(7, '03:30')->withoutOverlapping();

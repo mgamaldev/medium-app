@@ -4,20 +4,22 @@ namespace App\Notifications;
 
 use App\Models\Article;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
-class ArticlePublishedNotification extends Notification
+class ArticlePublishedNotification extends Notification implements ShouldQueue
 {
-    use Queueable;
+    use Queueable, SerializesModels;
 
-    /**
-     * Create a new notification instance.
-     */
-    public function __construct(public Article $article)
-    {
-        //
-    }
+    public $tries = 3;
+    public $backoff = [10, 30, 60];
+
+
+    public function __construct(public Article $article) {}
 
     /**
      * Get the notification's delivery channels.
@@ -34,6 +36,8 @@ class ArticlePublishedNotification extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
+        throw new \RuntimeException('Simulated outage');
+        
         return (new MailMessage)
             ->line('The introduction to the notification.')
             ->action('Notification Action', url('/'))
@@ -50,5 +54,15 @@ class ArticlePublishedNotification extends Notification
         return [
             //
         ];
+    }
+
+    public function failed(Throwable $exception): void
+    {
+        Log::error('Article published notification failed permanently', [
+            'job'       => static::class,
+            'user_id'   => $this->article->user_id,
+            'exception' => $exception->getMessage(),
+            'trace'     => substr($exception->getTraceAsString(), 0, 500),
+        ]);
     }
 }
