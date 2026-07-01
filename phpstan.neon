@@ -7,3 +7,4 @@ parameters:
     paths:
         - app
     reportUnmatchedIgnoredErrors: false
+    checkModelProperties: true
