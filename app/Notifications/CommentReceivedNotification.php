@@ -8,10 +8,16 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class CommentReceivedNotification extends Notification implements ShouldQueue
 {
     use Queueable, SerializesModels;
+
+    
+    public $tries = 3;
+    public $backoff = [10, 30, 60];
 
     /**
      * Get the queue connections for each channel.
@@ -42,6 +48,8 @@ class CommentReceivedNotification extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): MailMessage
     {
+        throw new \RuntimeException('Simulated outage');
+
         return (new MailMessage)
             ->line("{$this->comment->user->username} add new comment: {$this->comment->body} at this article {$this->comment->article->title}");
     }
@@ -57,4 +65,15 @@ class CommentReceivedNotification extends Notification implements ShouldQueue
             //
         ];
     }
+
+    public function failed(Throwable $exception): void
+    {
+        Log::error('Comment received notification failed permanently', [
+            'job'       => static::class,
+            'user_id'   => $this->comment->user_id,
+            'exception' => $exception->getMessage(),
+            'trace'     => substr($exception->getTraceAsString(), 0, 500),
+        ]);
+    }
+    
 }
