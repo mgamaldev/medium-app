@@ -35,41 +35,40 @@ class QueueMonitorCommand extends Command
         foreach ($failedJobs as $job) {
             $payloadData = json_decode($job->payload, true);
             $jobClass = $payloadData['displayName'] ?? 'Unknown';
-            
-            if(!isset($summary[$jobClass])){
+
+            if (! isset($summary[$jobClass])) {
                 $summary[$jobClass] = 0;
             }
 
             $summary[$jobClass]++;
         }
 
-        if(empty($summary)){
+        if (empty($summary)) {
             $this->info('No failed jobs older than 24 hours');
+
             return;
         }
 
-        $this->components->twoColumnDetail("Failed Job Summary (last 24 hours)");
+        $this->components->twoColumnDetail('Failed Job Summary (last 24 hours)');
 
-        foreach($summary as $job => $count){
-            $this->components->task("$job", function()use($count){
-                
-            });
+        foreach ($summary as $job => $count) {
+            $this->components->task("$job", function () {});
         }
 
         $formattedData = [];
 
-        foreach($summary as $className => $count){
+        foreach ($summary as $className => $count) {
             $formattedData[] = [
                 'Job' => $className,
                 'Failed Count' => $count,
             ];
         }
 
-        usort($formattedData, function($a, $b) {
+        usort($formattedData, function ($a, $b) {
             return $b['Failed Count'] <=> $a['Failed Count'];
         });
 
-        $this->table(['job_class','failed_count'], $formattedData);
+        $this->table(['job_class', 'failed_count'], $formattedData);
 
     }
 }
