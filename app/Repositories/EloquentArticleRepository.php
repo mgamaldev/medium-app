@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Enums\ArticleStatus;
 use App\Events\ArticlePublished;
 use App\Models\Article;
+use App\Models\TrendingArticle;
 use App\Repositories\Contracts\ArticleRepositoryInterface;
 
 class EloquentArticleRepository implements ArticleRepositoryInterface
@@ -31,7 +32,10 @@ class EloquentArticleRepository implements ArticleRepositoryInterface
 
     public function getTrending()
     {
-        return Article::trending()->get();
+        return TrendingArticle::with('article')
+            ->orderBy('trending_score', 'desc')
+            ->get()
+            ->pluck('article');
     }
 
     public function create(array $data): Article

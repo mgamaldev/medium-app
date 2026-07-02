@@ -24,7 +24,7 @@ class SendFollowerNotificationJob implements ShouldQueue
 
     public function handle(): void
     {
-        $this->user->notify(new NewFollowerNotification($this->follower));
+        $this->user->notify(new NewFollowerNotification($this->user, $this->follower));
     }
 
     public function failed(Throwable $exception)
