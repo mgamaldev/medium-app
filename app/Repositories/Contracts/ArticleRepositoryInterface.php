@@ -17,6 +17,8 @@ interface ArticleRepositoryInterface
 
     public function getTrending();
 
+    public function calculateTrendingArticles(int $limit = 50): void;
+
     public function create(array $data): Article;
 
     public function calculateTrendingArticles(int $limit = 50): void;
