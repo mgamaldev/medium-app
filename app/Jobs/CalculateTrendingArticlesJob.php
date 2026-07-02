@@ -2,28 +2,29 @@
 
 namespace App\Jobs;
 
-use App\Repositories\Contracts\ArticleRepositoryInterface;
+use App\Models\TrendingArticle;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 
 class CalculateTrendingArticlesJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Queueable;
 
     /**
      * Create a new job instance.
      */
-    public function __construct() {}
+    public function __construct(protected TrendingArticle $trendingArticle) {}
 
     /**
      * Execute the job.
      */
-    public function handle(ArticleRepositoryInterface $articleRepository): void
+    public function handle(): void
     {
-        $articleRepository->calculateTrendingArticles(50);
+        $trendingScore = $this->trendingArticle->article->likes_count + $this->trendingArticle->article->comments_count;
+
+        $this->trendingArticle->update([
+            'trending_score' => $trendingScore,
+        ]);
 
     }
 }
