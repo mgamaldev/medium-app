@@ -37,22 +37,22 @@ class Article extends Model
         ];
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-
     }
 
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class);
-
     }
 
     public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);
-
     }
 
     public function likes(): HasMany
@@ -87,6 +87,5 @@ class Article extends Model
         ]);
 
         ArticlePublished::dispatch($this);
-
     }
 }
