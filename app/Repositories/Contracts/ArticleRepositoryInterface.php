@@ -3,6 +3,7 @@
 namespace App\Repositories\Contracts;
 
 use App\Models\Article;
+use Carbon\Carbon;
 
 interface ArticleRepositoryInterface
 {
@@ -16,7 +17,9 @@ interface ArticleRepositoryInterface
 
     public function getTrending();
 
+    public function create(array $data): Article;
+
     public function calculateTrendingArticles(int $limit = 50): void;
 
-    public function create(array $data): Article;
+    public function pruneStaleDrafts(Carbon $staleDate, int $chunkSize, callable $callback): void;
 }
