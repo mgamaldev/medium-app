@@ -7,6 +7,7 @@ use App\Events\ArticlePublished;
 use App\Models\Article;
 use App\Models\TrendingArticle;
 use App\Repositories\Contracts\ArticleRepositoryInterface;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class EloquentArticleRepository implements ArticleRepositoryInterface
@@ -37,6 +38,18 @@ class EloquentArticleRepository implements ArticleRepositoryInterface
             ->orderBy('trending_score', 'desc')
             ->get()
             ->pluck('article');
+    }
+
+    public function create(array $data): Article
+    {
+        /** @var Article $article */
+        $article = Article::create($data);
+
+        if ($article->status == ArticleStatus::PUBLISHED) {
+            ArticlePublished::dispatch($article);
+        }
+
+        return $article;
     }
 
     public function calculateTrendingArticles(int $limit = 50): void
@@ -92,18 +105,20 @@ class EloquentArticleRepository implements ArticleRepositoryInterface
                 TrendingArticle::insert($topResults);
             }
         });
-
     }
 
-    public function create(array $data): Article
+    public function pruneStaleDrafts(Carbon $staleDate, int $chunkSize, callable $callback): void
     {
-        /** @var Article $article */
-        $article = Article::create($data);
+        Article::where('status', ArticleStatus::DRAFT)
+            ->where('updated_at', '<=', $staleDate)
+            ->whereNull('deleted_at')
+            ->chunkById($chunkSize, function ($articles) use ($callback) {
 
-        if ($article->status == ArticleStatus::PUBLISHED) {
-            ArticlePublished::dispatch($article);
-        }
+                $articleIds = $articles->pluck('id');
 
-        return $article;
+                $prunedCount = Article::whereIn('id', $articleIds)->delete();
+
+                $callback($prunedCount);
+            });
     }
 }

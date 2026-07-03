@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use InvalidArgumentException;
 
 /**
@@ -20,7 +21,7 @@ use InvalidArgumentException;
  */
 class Article extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     public function newEloquentBuilder($query): ArticleQueryBuilder
     {
@@ -87,6 +88,5 @@ class Article extends Model
         ]);
 
         ArticlePublished::dispatch($this);
-
     }
 }
