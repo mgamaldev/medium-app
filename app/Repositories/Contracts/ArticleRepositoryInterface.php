@@ -22,4 +22,6 @@ interface ArticleRepositoryInterface
     public function calculateTrendingArticles(int $limit = 50): void;
 
     public function pruneStaleDrafts(Carbon $staleDate, int $chunkSize, callable $callback): void;
+
+    public function EstimateReadTimeJob(Article $article): void;
 }
