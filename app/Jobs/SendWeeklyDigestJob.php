@@ -2,10 +2,6 @@
 
 namespace App\Jobs;
 
-<<<<<<< HEAD
-use App\Enums\ArticleStatus;
-=======
->>>>>>> 4d4f3e1 (Add sendWeeklyDigestJob with all related functions and files)
 use App\Mail\WeeklyDigestMail;
 use App\Models\Article;
 use App\Models\User;
