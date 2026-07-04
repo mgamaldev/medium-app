@@ -27,7 +27,7 @@ class QueueMonitorCommand extends Command
     public function handle()
     {
         $failedJobs = DB::table('failed_jobs')
-            ->where('failed_at', '<', now()->subDay())
+            ->where('failed_at', '<=', now()->subDay())
             ->get();
 
         $summary = [];
@@ -69,7 +69,6 @@ class QueueMonitorCommand extends Command
             return $b['Failed Count'] <=> $a['Failed Count'];
         });
 
-        $this->table(['job_class','failed_count'], $formattedData);
-
+        $this->table(['job_class', 'failed_count'], $formattedData);
     }
 }
