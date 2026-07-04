@@ -19,9 +19,11 @@ class NewFollowerNotification extends Notification implements ShouldQueue
     public $tries = 3;
     public $backoff = [10, 30, 60];
 
-    public function viaQueue(object $notifiable): string
+    public function viaQueues(object $notifiable): array
     {
-        return 'notifications';
+        return [
+            'mail' => 'notifications',
+        ];
     }
 
     public function __construct(public User $user, public User $follower) {}
