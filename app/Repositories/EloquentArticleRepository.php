@@ -5,7 +5,9 @@ namespace App\Repositories;
 use App\Enums\ArticleStatus;
 use App\Events\ArticlePublished;
 use App\Models\Article;
+use App\Models\TrendingArticle;
 use App\Repositories\Contracts\ArticleRepositoryInterface;
+use Illuminate\Support\Facades\DB;
 
 class EloquentArticleRepository implements ArticleRepositoryInterface
 {
@@ -31,7 +33,66 @@ class EloquentArticleRepository implements ArticleRepositoryInterface
 
     public function getTrending()
     {
-        return Article::trending()->get();
+        return TrendingArticle::with('article')
+            ->orderBy('trending_score', 'desc')
+            ->get()
+            ->pluck('article');
+    }
+
+    public function calculateTrendingArticles(int $limit = 50): void
+    {
+        $trendingResults = [];
+
+        $oneWeekAgo = now()->subDays(7);
+
+        Article::published()
+            ->withCount([
+                'likes' => function ($query) use ($oneWeekAgo) {
+                    $query->where('likes.created_at', '>=', $oneWeekAgo);
+                },
+                'comments' => function ($query) use ($oneWeekAgo) {
+                    $query->where('comments.created_at', '>=', $oneWeekAgo);
+                },
+            ])
+            ->with(['user' => function ($query) use ($oneWeekAgo) {
+                $query->withCount([
+                    'followers' => function ($q) use ($oneWeekAgo) {
+                        $q->where('users.created_at', '>=', $oneWeekAgo);
+                    },
+                ]);
+            }])
+            ->chunk(200, function ($articles) use (&$trendingResults) {
+                /** @var Article $article */
+                foreach ($articles as $article) {
+
+                    $likesCount = $article->likes_count;
+                    $commentsCount = $article->comments_count;
+                    $authorNewFollowersCount = $article->user ? $article->user->followers_count : 0;
+
+                    $score = ($likesCount * 2) + ($commentsCount * 4) + ($authorNewFollowersCount * 2);
+
+                    if ($score > 0) {
+                        $trendingResults[] = [
+                            'article_id' => $article->id,
+                            'trending_score' => $score,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];
+                    }
+                }
+            });
+
+        usort($trendingResults, fn ($a, $b) => $b['trending_score'] <=> $a['trending_score']);
+
+        $topResults = array_slice($trendingResults, 0, $limit);
+
+        DB::transaction(function () use ($topResults) {
+            TrendingArticle::query()->delete();
+            if (! empty($topResults)) {
+                TrendingArticle::insert($topResults);
+            }
+        });
+
     }
 
     public function create(array $data): Article

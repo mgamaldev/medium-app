@@ -6,6 +6,8 @@ use App\Factories\ArticleFactory;
 use App\Models\Article;
 use App\Models\User;
 use App\Notifications\ArticlePublishedNotification;
+use App\Repositories\Contracts\ArticleRepositoryInterface;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -13,7 +15,7 @@ use Illuminate\Support\Facades\Notification;
 
 class ArticleController extends Controller
 {
-    public function __construct(protected ArticleFactory $articleFactory) {}
+    public function __construct(protected ArticleFactory $articleFactory, protected ArticleRepositoryInterface $articleRepository) {}
 
     public function store(Request $request)
     {
@@ -59,5 +61,16 @@ class ArticleController extends Controller
             'message' => 'Article published successfully',
             'article' => $article,
         ], 200);
+    }
+
+    public function getTrending(): JsonResponse
+    {
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Trending articles fetched successfully',
+            'data' => $this->articleRepository->getTrending(),
+        ]);
+
     }
 }
