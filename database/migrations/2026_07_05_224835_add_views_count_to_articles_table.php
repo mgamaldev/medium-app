@@ -9,12 +9,12 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
-        Schema::table('articles', function (Blueprint $table) {
-            $table->unsignedInteger('views_count')->default(0)->after('body');
-        });
-    }
+public function up(): void
+{
+    Schema::table('articles', function (Blueprint $table) {
+        $table->unsignedInteger('views_count')->default(0)->after('body');
+    });
+}
 
     /**
      * Reverse the migrations.
