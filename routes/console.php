@@ -12,8 +12,6 @@ Artisan::command('inspire', function () {
 
 Schedule::command('digests:dispatch')->weeklyOn(1, '09:00');
 
-Schedule::command('articles:trending')->dailyAt('02:00')->withoutOverlapping()->onOneServer();
-
 Schedule::job(CalculateTrendingArticlesJob::class)->dailyAt('02:00')->withoutOverlapping()->onOneServer();
 
 Schedule::job(PruneStaleDraftsJob::class)->weeklyOn(7, '03:30')->withoutOverlapping();
