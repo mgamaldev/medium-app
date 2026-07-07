@@ -15,7 +15,7 @@ class UserController extends Controller
 
         $follower->follow($user);
 
-        $user->notify(new NewFollowerNotification($follower));
+        $user->notify(new NewFollowerNotification($follower, $user));
 
         return response()->json($user, 200);
 
