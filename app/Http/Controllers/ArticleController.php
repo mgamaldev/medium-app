@@ -6,6 +6,7 @@ use App\Factories\ArticleFactory;
 use App\Models\Article;
 use App\Models\User;
 use App\Notifications\ArticlePublishedNotification;
+use App\Repositories\Contracts\ArticleRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;

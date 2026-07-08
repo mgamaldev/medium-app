@@ -15,8 +15,8 @@ class CommentReceivedNotification extends Notification implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    
     public $tries = 3;
+
     public $backoff = [10, 30, 60];
 
     /**
@@ -48,8 +48,6 @@ class CommentReceivedNotification extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): MailMessage
     {
-        throw new \RuntimeException('Simulated outage');
-
         return (new MailMessage)
             ->line("{$this->comment->user->username} add new comment: {$this->comment->body} at this article {$this->comment->article->title}");
     }
@@ -69,11 +67,10 @@ class CommentReceivedNotification extends Notification implements ShouldQueue
     public function failed(Throwable $exception): void
     {
         Log::error('Comment received notification failed permanently', [
-            'job'       => static::class,
-            'user_id'   => $this->comment->user_id,
+            'job' => static::class,
+            'user_id' => $this->comment->user_id,
             'exception' => $exception->getMessage(),
-            'trace'     => substr($exception->getTraceAsString(), 0, 500),
+            'trace' => substr($exception->getTraceAsString(), 0, 500),
         ]);
     }
-    
 }
