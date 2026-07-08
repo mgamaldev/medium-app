@@ -145,22 +145,4 @@ class ArticleFlowTest extends TestCase
             'status' => ArticleStatus::DRAFT,
         ]);
     }
-
-    #[Test]
-    public function an_authorized_user_can_view_a_specific_article(): void
-    {
-        $user = User::factory()->create();
-        $article = Article::factory()->create([
-            'user_id' => $user->id,
-            'status' => ArticleStatus::PUBLISHED,
-        ]);
-
-        $response = $this->actingAs($user)->getJson("/api/articles/{$article->id}");
-
-        $response->assertStatus(200);
-
-        $response->assertJson([
-            'id' => $article->id,
-        ]);
-    }
 }

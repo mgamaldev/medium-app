@@ -8,25 +8,20 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
-use Throwable;
 
 class NewFollowerNotification extends Notification implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    public $tries = 3;
-
-    public $backoff = [10, 30, 60];
-
-    public function viaQueues(object $notifiable): array
+    public function viaQueue(object $notifiable): string
     {
-        return [
-            'mail' => 'notifications',
-        ];
+        return 'notifications';
     }
 
-    public function __construct(public User $user, public User $follower) {}
+    public function __construct(public User $follower)
+    {
+        //
+    }
 
     /**
      * Get the notification's delivery channels.
@@ -57,15 +52,5 @@ class NewFollowerNotification extends Notification implements ShouldQueue
         return [
             //
         ];
-    }
-
-    public function failed(Throwable $exception): void
-    {
-        Log::error('New follower notification failed permanently', [
-            'job' => static::class,
-            'user_id' => $this->user->id,
-            'exception' => $exception->getMessage(),
-            'trace' => substr($exception->getTraceAsString(), 0, 500),
-        ]);
     }
 }
