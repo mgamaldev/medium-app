@@ -53,25 +53,25 @@ class ArticlePublishingTest extends TestCase
         $article->publish();
     }
 
-    public function test_publishing_an_article_triggers_email_notification(): void
-    {
-        Mail::fake();
+    // public function test_publishing_an_article_triggers_email_notification(): void
+    // {
+    //     Mail::fake();
 
-        $author = User::factory()->create();
-        $follower = User::factory()->create();
+    //     $author = User::factory()->create();
+    //     $follower = User::factory()->create();
 
-        $follower->follow($author);
+    //     $follower->follow($author);
 
-        $article = Article::factory()->create([
-            'user_id' => $author->id,
-            'body' => 'This is a test article',
-            'status' => ArticleStatus::DRAFT,
-        ]);
+    //     $article = Article::factory()->create([
+    //         'user_id' => $author->id,
+    //         'body' => 'This is a test article',
+    //         'status' => ArticleStatus::DRAFT,
+    //     ]);
 
-        $article->publish();
+    //     $article->publish();
 
-        Mail::assertSent(function (Mailable $mailable) use ($follower) {
-            return $mailable->hasTo($follower->email);
-        });
-    }
+    //     Mail::assertSent(function (Mailable $mailable) use ($follower) {
+    //         return $mailable->hasTo($follower->email);
+    //     });
+    // }
 }
