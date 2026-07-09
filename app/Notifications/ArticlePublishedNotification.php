@@ -8,20 +8,18 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class ArticlePublishedNotification extends Notification implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    public function viaQueue(object $notifiable): string
-    {
-        return 'notifications';
-    }
+    public $tries = 3;
 
-    public function __construct(public Article $article)
-    {
-        //
-    }
+    public $backoff = [10, 30, 60];
+
+    public function __construct(public Article $article) {}
 
     /**
      * Get the notification's delivery channels.
@@ -52,5 +50,15 @@ class ArticlePublishedNotification extends Notification implements ShouldQueue
         return [
             //
         ];
+    }
+
+    public function failed(Throwable $exception): void
+    {
+        Log::error('Article published notification failed permanently', [
+            'job' => static::class,
+            'user_id' => $this->article->user_id,
+            'exception' => $exception->getMessage(),
+            'trace' => substr($exception->getTraceAsString(), 0, 500),
+        ]);
     }
 }
