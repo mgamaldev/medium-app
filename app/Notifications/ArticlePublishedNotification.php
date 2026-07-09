@@ -16,8 +16,8 @@ class ArticlePublishedNotification extends Notification implements ShouldQueue
     use Queueable, SerializesModels;
 
     public $tries = 3;
-    public $backoff = [10, 30, 60];
 
+    public $backoff = [10, 30, 60];
 
     public function __construct(public Article $article) {}
 
@@ -36,8 +36,6 @@ class ArticlePublishedNotification extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): MailMessage
     {
-        throw new \RuntimeException('Simulated outage');
-        
         return (new MailMessage)
             ->line("This Article has been published {$this->article->title}");
     }
@@ -57,10 +55,10 @@ class ArticlePublishedNotification extends Notification implements ShouldQueue
     public function failed(Throwable $exception): void
     {
         Log::error('Article published notification failed permanently', [
-            'job'       => static::class,
-            'user_id'   => $this->article->user_id,
+            'job' => static::class,
+            'user_id' => $this->article->user_id,
             'exception' => $exception->getMessage(),
-            'trace'     => substr($exception->getTraceAsString(), 0, 500),
+            'trace' => substr($exception->getTraceAsString(), 0, 500),
         ]);
     }
 }
