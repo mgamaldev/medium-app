@@ -6,6 +6,7 @@ use App\Events\ArticlePublished;
 use App\Listeners\ClearArticleCache;
 use App\Listeners\SendAuthorNotification;
 use App\Models\Article;
+use App\Observers\ArticleObserver;
 use App\Policies\ArticlePolicy;
 use App\Repositories\Contracts\ArticleRepositoryInterface;
 use App\Repositories\EloquentArticleRepository;
@@ -39,6 +40,7 @@ class AppServiceProvider extends ServiceProvider
         );
 
         Gate::policy(Article::class, ArticlePolicy::class);
+        Article::observe(ArticleObserver::class);
 
     }
 }

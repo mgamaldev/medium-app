@@ -74,4 +74,25 @@ class ArticleController extends Controller
         ]);
 
     }
+
+    public function update(Request $request, Article $article)
+    {
+        Gate::authorize('update', $article);
+
+        $validateData = $request->validate(
+            [
+                'title' => 'required|string|max:255',
+                'body' => 'required|string',
+                'cover_image' => 'image|mimes:jpeg,png,jpg,webp|max:2048',
+                'status' => 'required|string',
+            ]
+        );
+        $validateData['user_id'] = $request->user()->id;
+
+        $article = $this->articleRepository->update($article->id, $validateData);
+
+        $updatedArticle = $this->articleRepository->findById($article->id);
+
+        return response()->json($updatedArticle, 200);
+    }
 }

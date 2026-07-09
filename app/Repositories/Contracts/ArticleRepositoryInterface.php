@@ -19,7 +19,11 @@ interface ArticleRepositoryInterface
 
     public function create(array $data): Article;
 
+    public function update(int $id, array $data): Article;
+
     public function calculateTrendingArticles(int $limit = 50): void;
 
     public function pruneStaleDrafts(Carbon $staleDate, int $chunkSize, callable $callback): void;
+
+    public function updateReadTimeQuietly(int $articleId, int $minutes): void;
 }

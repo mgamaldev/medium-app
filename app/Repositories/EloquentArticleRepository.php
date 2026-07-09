@@ -52,6 +52,15 @@ class EloquentArticleRepository implements ArticleRepositoryInterface
         return $article;
     }
 
+    public function update(int $id, array $data): Article
+    {
+        /** @var Article $article */
+        $article = Article::findOrFail($id);
+        $article->update($data);
+
+        return $article;
+    }
+
     public function calculateTrendingArticles(int $limit = 50): void
     {
         $trendingResults = [];
@@ -120,5 +129,13 @@ class EloquentArticleRepository implements ArticleRepositoryInterface
 
                 $callback($prunedCount);
             });
+    }
+
+    public function updateReadTimeQuietly(int $articleId, int $minutes): void
+    {
+        /** @var Article $article */
+        $article = Article::findOrFail($articleId);
+        $article->read_time = $minutes;
+        $article->saveQuietly();
     }
 }

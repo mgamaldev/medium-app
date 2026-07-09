@@ -43,7 +43,6 @@ class NewFollowerNotification extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): MailMessage
     {
-
         return (new MailMessage)
             ->line("You got a new follower {$this->follower->username}");
     }
