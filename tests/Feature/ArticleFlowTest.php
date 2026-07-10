@@ -28,6 +28,7 @@ class ArticleFlowTest extends TestCase
             'title' => 'Test Title',
             'body' => 'Test Body',
             'status' => ArticleStatus::DRAFT,
+            'cover_image' => 'https://example.com/cover.jpg',
         ];
 
         $response = $this->postJson('/api/articles', $data);
