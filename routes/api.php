@@ -19,3 +19,5 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::get('/articles/trending', [ArticleController::class, 'getTrending']);
 
 Route::post('/articles/{article}/publish', [ArticleController::class, 'publish']);
+
+Route::post('articles/covers/presigned-url', [ArticleController::class, 'getPresignedUrl']);

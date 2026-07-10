@@ -72,7 +72,6 @@ class ArticleFlowTest extends TestCase
 
         Notification::assertSentTo($follower, ArticlePublishedNotification::class);
         Notification::assertNotSentTo($author, ArticlePublishedNotification::class);
-
     }
 
     #[Test]
@@ -98,7 +97,6 @@ class ArticleFlowTest extends TestCase
 
         $this->assertTrue($feedArticle->contains($publishedArticle));
         $this->assertFalse($feedArticle->contains($draftArticle));
-
     }
 
     #[Test]
@@ -120,7 +118,6 @@ class ArticleFlowTest extends TestCase
         $response->assertJsonValidationErrors(['title']);
 
         $this->assertDatabaseCount('articles', 0);
-
     }
 
     #[Test]
