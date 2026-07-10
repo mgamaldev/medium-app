@@ -9,13 +9,13 @@ use App\Models\Article;
 use App\Models\User;
 use App\Notifications\ArticlePublishedNotification;
 use App\Repositories\Contracts\ArticleRepositoryInterface;
+use App\Services\S3StorageService;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class ArticleController extends Controller
 {
@@ -100,34 +100,25 @@ class ArticleController extends Controller
         return response()->json($updatedArticle, 200);
     }
 
-    public function getPresignedUrl(Request $request): JsonResponse
+    public function getPresignedUrl(Request $request, S3StorageService $s3StorageService): JsonResponse
     {
         $validatedData = $request->validate(
             [
                 'file_name' => ['required', 'string'],
-                'content_type' => ['required', 'string', 'in:image/jpeg,image/png,image/jpg,image/webp'],
+                'content_type' => ['required', 'string'],
             ]
         );
 
-        $fileKey = 'covers/'.Str::uuid().'-'.pathinfo($validatedData['file_name'], PATHINFO_EXTENSION);
-
-        /** @var FilesystemAdapter $disk */
-        $disk = Storage::disk('s3');
-        /** @phpstan-ignore-next-line */
-        $client = $disk->getClient();
-
-        $command = $client->getCommand('PutObject', [
-            'Bucket' => config('filesystems.disks.s3.bucket'),
-            'Key' => $fileKey,
-            'ContentType' => $validatedData['content_type'],
-        ]);
-
-        $presignedRequest = $client->createPresignedRequest($command, '+5 minutes');
-        $uploadUrl = (string) $presignedRequest->getUri();
+        $result = $s3StorageService->generatePresignedUrl(
+            'covers',
+            2048000,
+            $validatedData['file_name'],
+            $validatedData['content_type']
+        );
 
         return response()->json([
-            'upload_url' => $uploadUrl,
-            'file_key' => $fileKey,
+            'upload_url' => $result['upload_url'],
+            'file_key' => $result['file_key'],
         ]);
     }
 }
