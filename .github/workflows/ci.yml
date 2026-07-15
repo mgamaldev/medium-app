@@ -1,8 +1,11 @@
 name: CI
 
 on:
+  push:
+    branches: [main]
   pull_request:
     branches: [main]
+
 
 jobs:
   style:
@@ -15,6 +18,8 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
+          tools: composer:v2
+          cache-provider: composer
 
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist
@@ -32,6 +37,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
+          cache-provider: composer
 
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist
@@ -50,6 +56,8 @@ jobs:
         with:
           php-version: '8.2'
           extensions: pdo_sqlite
+          coverage: pcov
+          cache-provider: composer
 
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist
@@ -63,5 +71,8 @@ jobs:
           DB_DATABASE: ":memory:"
         run: php artisan migrate --force
 
-      - name: Run tests
-        run: vendor/bin/phpunit
+      - name: Run tests with coverage
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: ":memory:"
+        run: php artisan test --coverage --min=70
