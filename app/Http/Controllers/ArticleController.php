@@ -116,9 +116,6 @@ class ArticleController extends Controller
             $validatedData['content_type']
         );
 
-        return response()->json([
-            'upload_url' => $result['upload_url'],
-            'file_key' => $result['file_key'],
-        ]);
+        return response()->json($result, 200);
     }
 }
