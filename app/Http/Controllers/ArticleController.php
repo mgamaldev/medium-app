@@ -109,7 +109,7 @@ class ArticleController extends Controller
             ]
         );
 
-        $fileKey = 'covers/'.Str::uuid().'-'.pathinfo($validatedData['file_name'], PATHINFO_EXTENSION);
+        $fileKey = 'covers/'.Str::uuid().'.'.pathinfo($validatedData['file_name'], PATHINFO_EXTENSION);
 
         /** @var FilesystemAdapter $disk */
         $disk = Storage::disk('s3');
