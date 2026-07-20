@@ -18,6 +18,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/articles', [ArticleController::class, 'store']);
     Route::patch('/articles/{article}', [ArticleController::class, 'update']);
     Route::post('/articles/{article}/comments', [CommentController::class, 'store']);
+
+    Route::post('articles/covers/presigned-url', [ArticleController::class, 'getPresignedUrl']);
 });
 
 Route::get('/articles/trending', [ArticleController::class, 'getTrending']);

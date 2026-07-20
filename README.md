@@ -1,3 +1,6 @@
+
+Please read our [Contributing Guide](CONTRIBUTING.md) before opening a Pull Request.
+
 ## System Architecture
 
 ![System Architecture](docs/architecture.png)
