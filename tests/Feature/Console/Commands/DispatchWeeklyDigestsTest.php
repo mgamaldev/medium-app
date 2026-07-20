@@ -108,9 +108,9 @@ class DispatchWeeklyDigestsTest extends TestCase
     public function test_it_dispatches_again_for_a_new_week_even_if_already_sent_previously(): void
     {
         Bus::fake();
-
+        
         $user = User::factory()->create(['subscribed_to_digests' => true]);
-        $user->recordDigestSend('2026-W28'); // previous week
+        $user->recordDigestSend('2026-W28'); 
 
         $this->artisan('digests:dispatch');
 
