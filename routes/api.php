@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CommentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -21,3 +22,6 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::get('/articles/trending', [ArticleController::class, 'getTrending']);
 
 Route::post('/articles/{article}/publish', [ArticleController::class, 'publish']);
+
+// Booking System
+Route::post('/bookings', [BookingController::class, 'store']);
