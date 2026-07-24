@@ -1,13 +1,16 @@
 name: Deploy to Staging
 
 on:
-  push:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
     branches:
       - main
 
 jobs:
   deploy-staging:
-    needs: [tests]
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
     steps:
@@ -21,19 +24,21 @@ jobs:
           extensions: mbstring, xml, ctype, iconv, mysql
           coverage: none
 
-      - name: Run Deploy Sequence
-        run: |
-          git fetch origin main
-          composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
-          
-          php artisan migrate --force
-          
-          php artisan config:cache
-          
-          echo "Restarting application process..."
-          
-          echo "Deployment to staging completed successfully!"
-        env:
-          STAGING_HOST: ${{ secrets.STAGING_HOST }}
-          STAGING_USER: ${{ secrets.STAGING_USER }}
-          STAGING_SSH_KEY: ${{ secrets.STAGING_SSH_KEY }}
+      - name: Deploy to Staging Server via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.STAGING_HOST }}
+          username: ${{ secrets.STAGING_USER }}
+          key: ${{ secrets.STAGING_SSH_KEY }}
+          script: |
+            cd /var/www/medium-app
+            
+            git pull origin main
+            
+            composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+            php artisan migrate --force
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
+            
+            echo "Deployment completed successfully on Staging Server!"
