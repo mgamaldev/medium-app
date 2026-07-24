@@ -20,7 +20,6 @@ class DispatchWeeklyDigestsTest extends TestCase
     {
         parent::setUp();
 
-        // Freeze time so week calculations are deterministic across the test file.
         Carbon::setTestNow(Carbon::parse('2026-07-13 09:00:00'));
 
         $this->currentWeek = now()->format('Y-\WW');
@@ -33,18 +32,18 @@ class DispatchWeeklyDigestsTest extends TestCase
         parent::tearDown();
     }
 
-    // public function test_it_dispatches_digest_job_for_subscribed_users(): void
-    // {
-    //     Bus::fake();
+    public function test_it_dispatches_digest_job_for_subscribed_users(): void
+    {
+        Bus::fake();
 
-    //     $user = User::factory()->create(['subscribed_to_digests' => true]);
+        $user = User::factory()->create(['subscribed_to_digests' => true]);
 
-    //     $this->artisan('digests:dispatch');
+        $this->artisan('digests:dispatch');
 
-    //     Bus::assertDispatched(SendWeeklyDigestJob::class, function ($job) use ($user) {
-    //         return $job->subscriber->is($user);
-    //     });
-    // }
+        Bus::assertDispatched(SendWeeklyDigestJob::class, function ($job) use ($user) {
+            return $job->subscriber->is($user);
+        });
+    }
 
     public function test_it_dispatches_the_job_onto_the_digests_queue(): void
     {
@@ -95,7 +94,6 @@ class DispatchWeeklyDigestsTest extends TestCase
 
         Bus::assertNotDispatched(SendWeeklyDigestJob::class);
 
-        // Ensure no duplicate record was inserted for the same user/week.
         $this->assertEquals(
             1,
             DB::table('digest_sends')
@@ -105,24 +103,24 @@ class DispatchWeeklyDigestsTest extends TestCase
         );
     }
 
-    // public function test_it_dispatches_again_for_a_new_week_even_if_already_sent_previously(): void
-    // {
-    //     Bus::fake();
-        
-    //     $user = User::factory()->create(['subscribed_to_digests' => true]);
-    //     $user->recordDigestSend('2026-W28'); 
+    public function test_it_dispatches_again_for_a_new_week_even_if_already_sent_previously(): void
+    {
+        Bus::fake();
 
-    //     $this->artisan('digests:dispatch');
+        $user = User::factory()->create(['subscribed_to_digests' => true]);
+        $user->recordDigestSend('2026-W28');
 
-    //     Bus::assertDispatched(SendWeeklyDigestJob::class, function ($job) use ($user) {
-    //         return $job->subscriber->is($user);
-    //     });
+        $this->artisan('digests:dispatch');
 
-    //     $this->assertDatabaseHas('digest_sends', [
-    //         'user_id' => $user->id,
-    //         'week_of' => $this->currentWeek,
-    //     ]);
-    // }
+        Bus::assertDispatched(SendWeeklyDigestJob::class, function ($job) use ($user) {
+            return $job->subscriber->is($user);
+        });
+
+        $this->assertDatabaseHas('digest_sends', [
+            'user_id' => $user->id,
+            'week_of' => $this->currentWeek,
+        ]);
+    }
 
     public function test_it_processes_multiple_subscribed_users(): void
     {
@@ -143,23 +141,23 @@ class DispatchWeeklyDigestsTest extends TestCase
         }
     }
 
-    // public function test_it_handles_a_mix_of_new_and_already_sent_subscribers_in_the_same_run(): void
-    // {
-    //     Bus::fake();
+    public function test_it_handles_a_mix_of_new_and_already_sent_subscribers_in_the_same_run(): void
+    {
+        Bus::fake();
 
-    //     $alreadySent = User::factory()->create(['subscribed_to_digests' => true]);
-    //     $alreadySent->recordDigestSend($this->currentWeek);
+        $alreadySent = User::factory()->create(['subscribed_to_digests' => true]);
+        $alreadySent->recordDigestSend($this->currentWeek);
 
-    //     $pending = User::factory()->create(['subscribed_to_digests' => true]);
+        $pending = User::factory()->create(['subscribed_to_digests' => true]);
 
-    //     $this->artisan('digests:dispatch');
+        $this->artisan('digests:dispatch');
 
-    //     Bus::assertDispatchedTimes(SendWeeklyDigestJob::class, 1);
+        Bus::assertDispatchedTimes(SendWeeklyDigestJob::class, 1);
 
-    //     Bus::assertDispatched(SendWeeklyDigestJob::class, function ($job) use ($pending) {
-    //         return $job->subscriber->is($pending);
-    //     });
-    // }
+        Bus::assertDispatched(SendWeeklyDigestJob::class, function ($job) use ($pending) {
+            return $job->subscriber->is($pending);
+        });
+    }
 
     public function test_it_does_nothing_when_there_are_no_subscribed_users(): void
     {

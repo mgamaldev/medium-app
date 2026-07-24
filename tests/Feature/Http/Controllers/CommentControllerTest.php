@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Models\Article;
-use App\Models\Comment;
 use App\Models\User;
 use App\Notifications\CommentReceivedNotification;
 use Illuminate\Foundation\Testing\RefreshDatabase;

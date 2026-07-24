@@ -17,7 +17,7 @@ class SendWeeklyDigestJob implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(protected User $subscriber) {}
+    public function __construct(public User $subscriber) {}
 
     /**
      * Execute the job.
@@ -27,6 +27,7 @@ class SendWeeklyDigestJob implements ShouldQueue
         $articles = Article::query()
             ->where('published_at', '>=', now()->subDays(7))
             ->where('status', ArticleStatus::PUBLISHED)
+            ->withCount(['likes', 'comments'])
             ->orderByRaw('likes_count + comments_count desc')
             ->limit(5)
             ->get();

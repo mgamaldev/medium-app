@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Unit\Unit\Notifications;
+namespace Tests\Unit\Notifications;
 
 use PHPUnit\Framework\TestCase;
 
-class CommentReceivedNotificationTest extends TestCase
+class NewFollowerNotificationTest extends TestCase
 {
     /**
      * A basic unit test example.
