@@ -13,11 +13,14 @@ class UserController extends Controller
         /** @var User $follower */
         $follower = Auth::user();
 
+        if ($follower->id === $user->id) {
+            return response()->json(['message' => 'You cannot follow yourself'], 422);
+        }
+
         $follower->follow($user);
 
-        $user->notify(new NewFollowerNotification($follower, $user));
+        $user->notify(new NewFollowerNotification($user, $follower));
 
         return response()->json($user, 200);
-
     }
 }

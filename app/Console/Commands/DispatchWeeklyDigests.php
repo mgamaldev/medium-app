@@ -29,7 +29,7 @@ class DispatchWeeklyDigests extends Command
     {
         $currentWeek = now()->format('Y-\WW');
 
-        $subscribers = User::query()->where('subscribed_to_digests', true)
+        User::query()->where('subscribed_to_digests', true)
             ->chunkById(500, function ($users) use ($currentWeek) {
                 foreach ($users as $user) {
                     if ($user->hasDigestBeenSent($currentWeek)) {
