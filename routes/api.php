@@ -17,11 +17,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/articles/{article}/comments', [CommentController::class, 'store']);
 
     Route::post('articles/covers/presigned-url', [ArticleController::class, 'getPresignedUrl']);
+
+    // Booking System
+    Route::post('/bookings', [BookingController::class, 'store']);
+
 });
 
 Route::get('/articles/trending', [ArticleController::class, 'getTrending']);
 
 Route::post('/articles/{article}/publish', [ArticleController::class, 'publish']);
-
-// Booking System
-Route::post('/bookings', [BookingController::class, 'store']);

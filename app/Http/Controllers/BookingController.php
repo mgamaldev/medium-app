@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreBookingRequest;
 use App\Models\Customer;
 use App\Models\Slot;
+use App\Models\User;
 use App\Services\BookingService;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -16,10 +17,18 @@ class BookingController extends Controller
     public function store(StoreBookingRequest $request): JsonResponse
     {
         $slotId = $request->validated('slot_id');
-        $customerId = $request->validated('customer_id');
+
+        /** @var User $user */
+        $user = $request->user();
+        $customer = $user->customer;
+
+        if (! $customer instanceof Customer) {
+            return response()->json([
+                'message' => 'Customer profile not found for this user.',
+            ], 404);
+        }
 
         $slot = Slot::findOrFail($slotId);
-        $customer = Customer::findOrFail($customerId);
 
         try {
             $booking = $this->bookingService->createBooking($slot, $customer);

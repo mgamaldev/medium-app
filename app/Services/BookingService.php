@@ -13,19 +13,22 @@ class BookingService
 {
     public function createBooking(Slot $slot, Customer $customer): Booking
     {
-        if ($slot->status !== SlotStatus::AVAILABLE) {
-            throw new \Exception('Slot is not available');
-        }
-
         return DB::transaction(function () use ($slot, $customer) {
 
+            $lockedSlot = Slot::where('id', $slot->id)
+                ->lockForUpdate()
+                ->firstOrFail();
+
+            if ($lockedSlot->status !== SlotStatus::AVAILABLE) {
+                throw new \Exception('Slot is not available');
+            }
             $booking = Booking::create([
-                'slot_id' => $slot->id,
+                'slot_id' => $lockedSlot->id,
                 'customer_id' => $customer->id,
                 'status' => BookingStatus::CONFIRMED,
             ]);
 
-            $slot->update(['status' => SlotStatus::BOOKED]);
+            $lockedSlot->update(['status' => SlotStatus::BOOKED]);
 
             return $booking;
         });

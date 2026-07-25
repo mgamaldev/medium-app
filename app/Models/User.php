@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\ArticleStatus;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
@@ -106,5 +107,13 @@ class User extends Authenticatable
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+    }
+
+    /**
+     * @return HasOne<Customer, $this>
+     */
+    public function customer(): HasOne
+    {
+        return $this->hasOne(Customer::class);
     }
 }
