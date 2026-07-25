@@ -32,5 +32,9 @@
         <env name="PULSE_ENABLED" value="false"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
         <env name="NIGHTWATCH_ENABLED" value="false"/>
+        <env name="AWS_ACCESS_KEY_ID" value="fake-key"/>
+        <env name="AWS_SECRET_ACCESS_KEY" value="fake-secret"/>
+        <env name="AWS_DEFAULT_REGION" value="us-east-1"/>
+        <env name="AWS_BUCKET" value="fake-bucket"/>
     </php>
 </phpunit>

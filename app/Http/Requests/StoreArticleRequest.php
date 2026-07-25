@@ -5,7 +5,6 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\Validator;
 
 class StoreArticleRequest extends FormRequest
 {
@@ -32,13 +31,13 @@ class StoreArticleRequest extends FormRequest
         ];
     }
 
-    public function withValidator(Validator $validator)
+    public function withValidator($validator)
     {
         $validator->after(function ($validator) {
-            $cover_image = $this->input('cover_image');
+            $cover_key = $this->input('cover_key');
 
-            if ($cover_image && ! Storage::disk('s3')->exists($cover_image)) {
-                $validator->errors()->add('cover_image', 'The cover_image is not valid');
+            if ($cover_key && ! Storage::disk('s3')->exists($cover_key)) {
+                $validator->errors()->add('cover_key', 'The cover key is not valid');
             }
         });
     }
