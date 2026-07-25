@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Notifications\ArticlePublishedNotification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\Sanctum;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -19,6 +20,10 @@ class ArticleFlowTest extends TestCase
     #[Test]
     public function test_author_can_create_draft_article(): void
     {
+        Storage::fake('s3');
+
+        $fakeDiskPath = 'covers/cover.jpg';
+        Storage::disk('s3')->put($fakeDiskPath, 'cover-image');
 
         $author = User::factory()->create();
 
@@ -28,6 +33,7 @@ class ArticleFlowTest extends TestCase
             'title' => 'Test Title',
             'body' => 'Test Body',
             'status' => ArticleStatus::DRAFT,
+            'cover_image' => $fakeDiskPath,
         ];
 
         $response = $this->postJson('/api/articles', $data);
@@ -72,7 +78,6 @@ class ArticleFlowTest extends TestCase
 
         Notification::assertSentTo($follower, ArticlePublishedNotification::class);
         Notification::assertNotSentTo($author, ArticlePublishedNotification::class);
-
     }
 
     #[Test]
@@ -98,7 +103,6 @@ class ArticleFlowTest extends TestCase
 
         $this->assertTrue($feedArticle->contains($publishedArticle));
         $this->assertFalse($feedArticle->contains($draftArticle));
-
     }
 
     #[Test]
@@ -120,7 +124,6 @@ class ArticleFlowTest extends TestCase
         $response->assertJsonValidationErrors(['title']);
 
         $this->assertDatabaseCount('articles', 0);
-
     }
 
     #[Test]
