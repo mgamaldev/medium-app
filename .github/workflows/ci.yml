@@ -99,20 +99,26 @@ jobs:
           coverage: none
 
       - name: Install Composer Dependencies
+        if: steps.changes.outputs.article == 'true'
         run: composer install --prefer-dist --no-interaction --no-progress
 
-      - name: Prepare Environment File
+      - name: Prepare Environment File & Database
+        if: steps.changes.outputs.article == 'true'
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: database/database.sqlite
         run: |
           cp .env.example .env
           php artisan key:generate
-
-      - name: Run Database Migrations & Seeders
-        run: |
           touch database/database.sqlite
           php artisan migrate --force
 
       - name: Create Test User and Sanctum Token
+        if: steps.changes.outputs.article == 'true'
         id: create-token
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: database/database.sqlite
         run: |
           TOKEN=$(php artisan tinker --execute="
             \$user = App\Models\User::factory()->create();
@@ -121,11 +127,16 @@ jobs:
           echo "SANCTUM_TOKEN=$TOKEN" >> $GITHUB_ENV
 
       - name: Start Laravel Application Server
+        if: steps.changes.outputs.article == 'true'
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: database/database.sqlite
         run: |
           php artisan serve --port=8000 &
           sleep 3
 
       - name: Run k6 Smoke Test
+        if: steps.changes.outputs.article == 'true'
         uses: grafana/k6-action@v0.3.1
         with:
           filename: tests/k6/article-smoke.js
