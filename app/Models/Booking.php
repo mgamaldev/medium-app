@@ -7,12 +7,19 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property BookingStatus $status
+ * @property string $idempotency_key
+ * @property-read Slot $slot
+ * @property-read Customer $customer
+ */
 class Booking extends Model
 {
     protected $fillable = [
         'slot_id',
         'customer_id',
         'status',
+        'idempotency_key',
     ];
 
     protected function casts(): array

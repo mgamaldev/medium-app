@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Services\BookingService;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Str;
 
 class BookingController extends Controller
 {
@@ -30,8 +31,10 @@ class BookingController extends Controller
 
         $slot = Slot::findOrFail($slotId);
 
+        $idempotencyKey = $request->header('Idempotency-Key', (string) Str::uuid());
+
         try {
-            $booking = $this->bookingService->createBooking($slot, $customer);
+            $booking = $this->bookingService->createBooking($slot, $customer, $idempotencyKey);
 
             return response()->json([
                 'message' => 'Booking created successfully',
