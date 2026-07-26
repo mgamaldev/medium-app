@@ -7,31 +7,40 @@ use App\Enums\SlotStatus;
 use App\Models\Booking;
 use App\Models\Customer;
 use App\Models\Slot;
+use Illuminate\Contracts\Cache\LockTimeoutException;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class BookingService
 {
     public function createBooking(Slot $slot, Customer $customer): Booking
     {
-        return DB::transaction(function () use ($slot, $customer) {
+        $lockKey = "booking:slot:{$slot->id}";
+        $lock = Cache::lock($lockKey, 10);
 
-            $lockedSlot = Slot::where('id', $slot->id)
-                ->lockForUpdate()
-                ->firstOrFail();
+        try {
+            return $lock->block(10, function () use ($slot, $customer) {
 
-            if ($lockedSlot->status !== SlotStatus::AVAILABLE) {
-                throw new \Exception('Slot is not available');
-            }
-            $booking = Booking::create([
-                'slot_id' => $lockedSlot->id,
-                'customer_id' => $customer->id,
-                'status' => BookingStatus::CONFIRMED,
-            ]);
+                return DB::transaction(function () use ($slot, $customer) {
 
-            $lockedSlot->update(['status' => SlotStatus::BOOKED]);
+                    $freshSlot = $slot->fresh();
 
-            return $booking;
-        });
+                    if (! $freshSlot || $freshSlot->status !== SlotStatus::AVAILABLE) {
+                        throw new \Exception('Slot is not available');
+                    }
+                    $booking = Booking::create([
+                        'slot_id' => $freshSlot->id,
+                        'customer_id' => $customer->id,
+                        'status' => BookingStatus::CONFIRMED,
+                    ]);
 
+                    $freshSlot->update(['status' => SlotStatus::BOOKED]);
+
+                    return $booking;
+                });
+            });
+        } catch (LockTimeoutException $e) {
+            throw new \Exception('Excuse for getting the lock, the crowd is very high');
+        }
     }
 }
