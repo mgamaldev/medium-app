@@ -17,6 +17,14 @@ class BookingController extends Controller
 
     public function store(StoreBookingRequest $request): JsonResponse
     {
+        $idempotencyKey = (string) $request->header('Idempotency-Key');
+
+        if (trim($idempotencyKey) === '') {
+            return response()->json([
+                'message' => 'The Idempotency-Key header is required.',
+            ], 422);
+        }
+
         $slotId = $request->validated('slot_id');
 
         /** @var User $user */
@@ -30,8 +38,6 @@ class BookingController extends Controller
         }
 
         $slot = Slot::findOrFail($slotId);
-
-        $idempotencyKey = $request->header('Idempotency-Key', (string) Str::uuid());
 
         try {
             $booking = $this->bookingService->createBooking($slot, $customer, $idempotencyKey);
