@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\AvatarController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -21,6 +22,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/articles/{article}/comments', [CommentController::class, 'store']);
 
     Route::post('articles/covers/presigned-url', [ArticleController::class, 'getPresignedUrl']);
+
+    // Booking System
+    Route::post('/bookings', [BookingController::class, 'store']);
+
 });
 
 Route::get('/articles/trending', [ArticleController::class, 'getTrending']);

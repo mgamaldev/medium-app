@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Customer;
+use App\Models\Slot;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -24,5 +26,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             ArticleTestSeeder::class,
         ]);
+
+        Customer::factory()->count(10)->create();
+        Slot::factory()->count(10)->create();
     }
 }
