@@ -24,7 +24,6 @@ class StoreBookingRequest extends FormRequest
     {
         return [
             'slot_id' => 'required|integer|exists:slots,id',
-
         ];
     }
 }

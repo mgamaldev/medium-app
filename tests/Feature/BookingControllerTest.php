@@ -94,7 +94,7 @@ class BookingControllerTest extends TestCase
 
     public function test_it_returns_client_error_when_user_has_no_customer_profile(): void
     {
-        $user = User::factory()->create(); // no customer attached
+        $user = User::factory()->create();
         $slot = Slot::factory()->create(['status' => SlotStatus::AVAILABLE]);
 
         $response = $this->actingAs($user)->postJson('/api/bookings', [
@@ -136,7 +136,7 @@ class BookingControllerTest extends TestCase
     public function test_it_ignores_customer_id_in_request_body_and_uses_authenticated_customer(): void
     {
         $user = $this->createUserWithCustomer();
-        $otherCustomer = Customer::factory()->create(); // customer not linked to $user
+        $otherCustomer = Customer::factory()->create();
 
         $slot = Slot::factory()->create([
             'status' => SlotStatus::AVAILABLE,
@@ -146,7 +146,7 @@ class BookingControllerTest extends TestCase
 
         $response = $this->actingAs($user)->postJson('/api/bookings', [
             'slot_id' => $slot->id,
-            'customer_id' => $otherCustomer->id, // attempt to book on behalf of someone else
+            'customer_id' => $otherCustomer->id,
         ]);
 
         $response->assertStatus(201)
