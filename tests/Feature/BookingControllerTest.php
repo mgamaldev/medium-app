@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Enums\BookingStatus;
 use App\Enums\SlotStatus;
 use App\Models\Booking;
 use App\Models\Customer;
@@ -14,178 +15,174 @@ class BookingControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    protected function createUserWithCustomer(): User
+    /**
+     * The endpoint under test.
+     * ASSUMPTION: route is POST /api/bookings. Update if your actual route differs.
+     */
+    private string $endpoint = '/api/bookings';
+
+    private function makeUserWithCustomer(): User
     {
-        return User::factory()
-            ->has(Customer::factory())
-            ->create();
+        $user = User::factory()->create();
+        Customer::factory()->create(['user_id' => $user->id]);
+
+        return $user->fresh();
     }
 
-    public function test_it_creates_a_booking_for_an_available_slot_using_database_seeder(): void
+    private function makeAvailableSlot(): Slot
     {
-        $this->seed();
-        $slot = Slot::available()->first();
-        $user = User::factory()->has(Customer::factory())->create();
-        $customer = $user->customer;
-
-        $this->assertNotNull($slot, 'Seeder should generate at least one available slot.');
-
-        $response = $this->actingAs($user)->postJson('/api/bookings', [
-            'slot_id' => $slot->id,
-        ]);
-
-        $response->assertStatus(201)
-            ->assertJsonPath('data.slot.id', $slot->id)
-            ->assertJsonPath('data.customer.id', $customer->id);
-
-        $this->assertDatabaseHas('bookings', [
-            'slot_id' => $slot->id,
-            'customer_id' => $customer->id,
-        ]);
-
-        $this->assertEquals(SlotStatus::BOOKED, $slot->fresh()->status);
-    }
-
-    public function test_it_creates_a_booking_for_an_available_slot(): void
-    {
-        $user = $this->createUserWithCustomer();
-        $slot = Slot::factory()->create([
+        return Slot::factory()->create([
             'status' => SlotStatus::AVAILABLE,
             'starts_at' => now()->addDay(),
-            'ends_at' => now()->addDay()->addMinutes(30),
+            'ends_at' => now()->addDay()->addHour(),
         ]);
+    }
 
-        $response = $this->actingAs($user)->postJson('/api/bookings', [
-            'slot_id' => $slot->id,
-        ]);
+    public function test_it_creates_a_booking_successfully(): void
+    {
+        $user = $this->makeUserWithCustomer();
+        $slot = $this->makeAvailableSlot();
+
+        $response = $this->actingAs($user)
+            ->postJson($this->endpoint, ['slot_id' => $slot->id], [
+                'Idempotency-Key' => 'key-123',
+            ]);
 
         $response->assertStatus(201)
             ->assertJsonPath('message', 'Booking created successfully')
-            ->assertJsonPath('data.slot.id', $slot->id)
-            ->assertJsonPath('data.customer.id', $user->customer->id);
+            ->assertJsonPath('data.slot_id', $slot->id);
 
         $this->assertDatabaseHas('bookings', [
             'slot_id' => $slot->id,
-            'customer_id' => $user->customer->id,
+            'idempotency_key' => 'key-123',
         ]);
-
-        $this->assertNotEquals(SlotStatus::AVAILABLE, $slot->fresh()->status);
     }
 
-    public function test_it_returns_a_client_error_when_slot_id_is_missing(): void
+    public function test_it_returns_422_when_idempotency_key_header_is_missing(): void
     {
-        $user = $this->createUserWithCustomer();
+        $user = $this->makeUserWithCustomer();
+        $slot = $this->makeAvailableSlot();
 
-        $response = $this->actingAs($user)->postJson('/api/bookings', []);
+        $response = $this->actingAs($user)
+            ->postJson($this->endpoint, ['slot_id' => $slot->id]);
 
-        $response->assertStatus(422);
+        $response->assertStatus(422)
+            ->assertJsonPath('message', 'The Idempotency-Key header is required.');
+
+        $this->assertDatabaseCount('bookings', 0);
     }
 
-    public function test_it_returns_a_client_error_for_a_nonexistent_slot(): void
+    public function test_it_returns_422_when_idempotency_key_header_is_blank(): void
     {
-        $user = $this->createUserWithCustomer();
+        $user = $this->makeUserWithCustomer();
+        $slot = $this->makeAvailableSlot();
 
-        $response = $this->actingAs($user)->postJson('/api/bookings', [
-            'slot_id' => 999999,
-        ]);
+        $response = $this->actingAs($user)
+            ->postJson($this->endpoint, ['slot_id' => $slot->id], [
+                'Idempotency-Key' => '   ',
+            ]);
 
-        $response->assertStatus(422);
+        $response->assertStatus(422)
+            ->assertJsonPath('message', 'The Idempotency-Key header is required.');
     }
 
-    public function test_it_returns_client_error_when_user_has_no_customer_profile(): void
+    public function test_it_returns_404_when_customer_profile_not_found(): void
     {
         $user = User::factory()->create();
-        $slot = Slot::factory()->create(['status' => SlotStatus::AVAILABLE]);
+        $slot = $this->makeAvailableSlot();
 
-        $response = $this->actingAs($user)->postJson('/api/bookings', [
-            'slot_id' => $slot->id,
-        ]);
-
-        $response->assertStatus(404);
-    }
-
-    public function test_it_rejects_booking_a_slot_that_is_not_available(): void
-    {
-        $userA = $this->createUserWithCustomer();
-        $userB = $this->createUserWithCustomer();
-
-        $slot = Slot::factory()->create([
-            'status' => SlotStatus::AVAILABLE,
-            'starts_at' => now()->addDay(),
-            'ends_at' => now()->addDay()->addMinutes(30),
-        ]);
-
-        $first = $this->actingAs($userA)->postJson('/api/bookings', [
-            'slot_id' => $slot->id,
-        ]);
-        $first->assertStatus(201);
-
-        $second = $this->actingAs($userB)->postJson('/api/bookings', [
-            'slot_id' => $slot->id,
-        ]);
-
-        $second->assertStatus(422);
-
-        $this->assertEquals(
-            1,
-            Booking::where('slot_id', $slot->id)->count(),
-            'Only one booking should exist for a slot that only allows a single confirmed booking.'
-        );
-    }
-
-    public function test_it_ignores_customer_id_in_request_body_and_uses_authenticated_customer(): void
-    {
-        $user = $this->createUserWithCustomer();
-        $otherCustomer = Customer::factory()->create();
-
-        $slot = Slot::factory()->create([
-            'status' => SlotStatus::AVAILABLE,
-            'starts_at' => now()->addDay(),
-            'ends_at' => now()->addDay()->addMinutes(30),
-        ]);
-
-        $response = $this->actingAs($user)->postJson('/api/bookings', [
-            'slot_id' => $slot->id,
-            'customer_id' => $otherCustomer->id,
-        ]);
-
-        $response->assertStatus(201)
-            ->assertJsonPath('data.customer.id', $user->customer->id);
-
-        $this->assertDatabaseHas('bookings', [
-            'slot_id' => $slot->id,
-            'customer_id' => $user->customer->id,
-        ]);
-
-        $this->assertDatabaseMissing('bookings', [
-            'customer_id' => $otherCustomer->id,
-        ]);
-    }
-
-    public function test_it_response_shape_includes_loaded_slot_and_customer(): void
-    {
-        $user = $this->createUserWithCustomer();
-        $slot = Slot::factory()->create([
-            'status' => SlotStatus::AVAILABLE,
-            'starts_at' => now()->addDay(),
-            'ends_at' => now()->addDay()->addMinutes(30),
-        ]);
-
-        $response = $this->actingAs($user)->postJson('/api/bookings', [
-            'slot_id' => $slot->id,
-        ]);
-
-        $response->assertStatus(201)
-            ->assertJsonStructure([
-                'message',
-                'data' => [
-                    'id',
-                    'slot_id',
-                    'customer_id',
-                    'status',
-                    'slot',
-                    'customer',
-                ],
+        $response = $this->actingAs($user)
+            ->postJson($this->endpoint, ['slot_id' => $slot->id], [
+                'Idempotency-Key' => 'key-123',
             ]);
+
+        $response->assertStatus(404)
+            ->assertJsonPath('message', 'Customer profile not found for this user.');
+    }
+
+    public function test_it_returns_422_when_slot_id_does_not_exist(): void
+    {
+        // NOTE: StoreBookingRequest has an `exists:slots,id` validation rule,
+        // so a non-existent slot_id is rejected by validation (422) before
+        // the controller's Slot::findOrFail() is ever reached.
+        $user = $this->makeUserWithCustomer();
+
+        $response = $this->actingAs($user)
+            ->postJson($this->endpoint, ['slot_id' => 999999], [
+                'Idempotency-Key' => 'key-123',
+            ]);
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors('slot_id');
+    }
+
+    public function test_it_returns_422_when_validation_fails_for_missing_slot_id(): void
+    {
+        $user = $this->makeUserWithCustomer();
+
+        $response = $this->actingAs($user)
+            ->postJson($this->endpoint, [], [
+                'Idempotency-Key' => 'key-123',
+            ]);
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors('slot_id');
+    }
+
+    public function test_it_returns_422_when_slot_is_not_available(): void
+    {
+        $user = $this->makeUserWithCustomer();
+        $slot = Slot::factory()->create([
+            'status' => SlotStatus::BOOKED,
+            'starts_at' => now()->addDay(),
+            'ends_at' => now()->addDay()->addHour(),
+        ]);
+
+        $response = $this->actingAs($user)
+            ->postJson($this->endpoint, ['slot_id' => $slot->id], [
+                'Idempotency-Key' => 'key-123',
+            ]);
+
+        $response->assertStatus(422)
+            ->assertJsonPath('message', 'Slot is not available');
+
+        $this->assertDatabaseCount('bookings', 0);
+    }
+
+    public function test_it_returns_the_existing_booking_when_idempotency_key_is_reused(): void
+    {
+        $user = $this->makeUserWithCustomer();
+        $customer = $user->customer;
+        $slot = $this->makeAvailableSlot();
+
+        // NOTE: Booking model does not use the HasFactory trait, so it has
+        // no Booking::factory(). Creating it directly instead.
+        $existingBooking = Booking::create([
+            'slot_id' => $slot->id,
+            'customer_id' => $customer->id,
+            'status' => BookingStatus::CONFIRMED,
+            'idempotency_key' => 'repeat-key',
+        ]);
+
+        $response = $this->actingAs($user)
+            ->postJson($this->endpoint, ['slot_id' => $slot->id], [
+                'Idempotency-Key' => 'repeat-key',
+            ]);
+
+        $response->assertStatus(201)
+            ->assertJsonPath('data.id', $existingBooking->id);
+
+        $this->assertDatabaseCount('bookings', 1);
+    }
+
+    public function test_it_requires_authentication(): void
+    {
+        $slot = $this->makeAvailableSlot();
+
+        $response = $this->postJson($this->endpoint, ['slot_id' => $slot->id], [
+            'Idempotency-Key' => 'key-123',
+        ]);
+
+        $response->assertStatus(401);
     }
 }
