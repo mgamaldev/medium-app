@@ -9,7 +9,6 @@ use App\Models\User;
 use App\Services\BookingService;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Str;
 
 class BookingController extends Controller
 {
