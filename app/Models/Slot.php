@@ -13,6 +13,7 @@ use Illuminate\Support\Carbon;
  * @property SlotStatus $status
  * @property Carbon $starts_at
  * @property Carbon $ends_at
+ * @property string $price
  */
 class Slot extends Model
 {
@@ -23,6 +24,7 @@ class Slot extends Model
         'starts_at',
         'ends_at',
         'status',
+        'price',
     ];
 
     protected function casts(): array
@@ -31,6 +33,7 @@ class Slot extends Model
             'starts_at' => 'datetime',
             'ends_at' => 'datetime',
             'status' => SlotStatus::class,
+            'price' => 'decimal:2',
         ];
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Services;
+namespace Tests\Unit;
 
 use App\Enums\BookingStatus;
 use App\Enums\SlotStatus;
