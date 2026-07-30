@@ -89,6 +89,8 @@ jobs:
               - 'app/Models/Article.php'
               - 'database/migrations/**'
               - 'routes/api.php'
+              - '.github/workflows/ci.yml'
+              - 'tests/k6/**'
 
       - name: Setup PHP
         if: steps.changes.outputs.article == 'true'
