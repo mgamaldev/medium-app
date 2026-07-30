@@ -13,7 +13,7 @@ use Illuminate\Support\Carbon;
  * @property SlotStatus $status
  * @property Carbon $starts_at
  * @property Carbon $ends_at
- * @property string $price
+ * @property numeric-string $price
  */
 class Slot extends Model
 {
