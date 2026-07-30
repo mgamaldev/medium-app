@@ -20,4 +20,3 @@ Schedule::job(PruneStaleDraftsJob::class)->weeklyOn(7, '03:30')->withoutOverlapp
 Schedule::job(new PruneOrphanedImagesJob(24))->daily();
 
 Schedule::command('bookings:release-expired')->everyMinute()->withoutOverlapping();
-
