@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ConfirmBookingRequest;
 use App\Http\Requests\StoreBookingRequest;
 use App\Models\Booking;
 use App\Models\Customer;
@@ -54,7 +55,7 @@ class BookingController extends Controller
         }
     }
 
-    public function confirm(StoreBookingRequest $request, Booking $booking, BookingService $bookingService)
+    public function confirm(ConfirmBookingRequest $request, Booking $booking)
     {
         /** @var User $user */
         $user = $request->user();
@@ -64,19 +65,15 @@ class BookingController extends Controller
             ], 403);
         }
 
-        $request->validate([
-            'payment_method_id' => 'required|string',
-        ]);
-
         try {
-            $booking = $bookingService->confirmBooking(
+            $confirmedBooking = $this->bookingService->confirmBooking(
                 $booking,
-                $request->input('payment_method_id')
+                $request->validated('payment_method_id')
             );
 
             return response()->json([
                 'message' => 'Booking confirmed successfully!',
-                'booking' => $booking,
+                'booking' => $confirmedBooking,
             ]);
         } catch (IncompletePayment $exception) {
             $paymentIntent = $exception->payment->asStripePaymentIntent();
@@ -84,7 +81,8 @@ class BookingController extends Controller
             return response()->json([
                 'requires_action' => true,
                 'payment_intent' => $paymentIntent,
-                'redirect_url' => route('cashier.payment', [$paymentIntent, 'redirect' => route('bookings.index')]),
+                /** @phpstan-ignore-next-line */
+                'redirect_url' => route('cashier.payment', [$exception->payment->id, 'redirect' => route('bookings.index')]),
             ], 402);
         }
     }

@@ -67,40 +67,53 @@ class BookingService
 
     public function confirmBooking(Booking $booking, string $paymentMethodId): Booking
     {
-        if ($booking->status !== BookingStatus::PENDING) {
-            return $booking;
-        }
+        $lockKey = "booking:confirm:{$booking->id}";
 
-        $amountInCents = (int) round($booking->slot->price * 100);
+        return Cache::lock($lockKey, 10)->block(5, function () use ($booking, $paymentMethodId) {
+            $booking->refresh();
 
-        $customer = $booking->customer;
-
-        try {
-            $customer->charge($amountInCents, $paymentMethodId, [
-                'payment_method_types' => ['card'],
-            ]);
-
-            return DB::transaction(function () use ($booking) {
-                $booking->update([
-                    'status' => BookingStatus::CONFIRMED,
-                ]);
-
-                $booking->slot->update([
-                    'status' => SlotStatus::BOOKED,
-                ]);
-
-                DB::afterCommit(function () use ($booking) {
-                    event(new BookingCreated($booking));
-                });
-
+            if ($booking->status === BookingStatus::CONFIRMED) {
                 return $booking;
-            });
-        } catch (IncompletePayment $e) {
-            throw $e;
-        } catch (\Exception $exception) {
-            Log::error("Payment failed for booking {$booking->id}: ".$exception->getMessage());
-            throw new \Exception('Payment processing failed. Please check your card details.');
-        }
+            }
+
+            if ($booking->status !== BookingStatus::PENDING) {
+                throw new \Exception('This booking is not pending confirmation.');
+            }
+
+            if ($booking->slot->status === SlotStatus::BOOKED) {
+                throw new \Exception('This slot is no longer available.');
+            }
+
+            $amountInCents = (int) round($booking->slot->price * 100);
+            $customer = $booking->customer;
+
+            try {
+                $customer->charge($amountInCents, $paymentMethodId, [
+                    'payment_method_types' => ['card'],
+                ]);
+
+                return DB::transaction(function () use ($booking) {
+                    $booking->update([
+                        'status' => BookingStatus::CONFIRMED,
+                    ]);
+
+                    $booking->slot->update([
+                        'status' => SlotStatus::BOOKED,
+                    ]);
+
+                    DB::afterCommit(function () use ($booking) {
+                        event(new BookingCreated($booking));
+                    });
+
+                    return $booking;
+                });
+            } catch (IncompletePayment $e) {
+                throw $e;
+            } catch (\Exception $exception) {
+                Log::error("Payment failed for booking {$booking->id}: ".$exception->getMessage());
+                throw new \Exception('Payment processing failed. Please check your card details.');
+            }
+        });
     }
 
     public function releaseExpiredReservations(?int $ttlMinutes = null): int
