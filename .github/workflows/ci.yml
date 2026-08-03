@@ -149,5 +149,5 @@ jobs:
           filename: tests/k6/article-smoke.js
           flags: --add-host=host.docker.internal:host-gateway
         env:
-          BASE_URL: 'http://host.docker.internal:8000'
+          BASE_URL: 'http://172.17.0.1:8000'
           SANCTUM_TOKEN: ${{ env.SANCTUM_TOKEN }}
