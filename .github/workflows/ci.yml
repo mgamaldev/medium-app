@@ -139,7 +139,6 @@ jobs:
           DB_CONNECTION: sqlite
           DB_DATABASE: database/database.sqlite
         run: |
-          run: |
           nohup php artisan serve --host=0.0.0.0 --port=8000 > storage/logs/laravel-serve.log 2>&1 &
           timeout 30s bash -c 'until curl -s http://127.0.0.1:8000; do sleep 1; done'
 
