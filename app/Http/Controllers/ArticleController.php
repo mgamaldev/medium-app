@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Notifications\ArticlePublishedNotification;
 use App\Repositories\Contracts\ArticleRepositoryInterface;
 use App\Services\S3StorageService;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -52,10 +53,12 @@ class ArticleController extends Controller
         }
         $article->publish();
 
-        /** @var User $author */
         $author = $article->user;
 
-        $followers = $author->followers()->get();
+        /**
+         * @var Collection<User> $followers
+         */
+        $followers = $author->followers;
 
         foreach ($followers as $recipient) {
             $recipient->notify(new ArticlePublishedNotification($article));

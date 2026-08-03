@@ -102,9 +102,6 @@ class BookingControllerTest extends TestCase
 
     public function test_it_returns_422_when_slot_id_does_not_exist(): void
     {
-        // NOTE: StoreBookingRequest has an `exists:slots,id` validation rule,
-        // so a non-existent slot_id is rejected by validation (422) before
-        // the controller's Slot::findOrFail() is ever reached.
         $user = $this->makeUserWithCustomer();
 
         $response = $this->actingAs($user)

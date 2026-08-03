@@ -5,18 +5,22 @@ namespace App\Models;
 use App\Enums\ArticleStatus;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 
 /**
  * @property-read int|null $followers_count
+ * @property-read Collection<User> $followers
+ *
+ * @use HasFactory<UserFactory>
  */
 class User extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
     use HasApiTokens, HasFactory, Notifiable;
 
     /**
@@ -59,7 +63,7 @@ class User extends Authenticatable
         return $this->belongsToMany(User::class, 'user_follower', 'follower_id', 'user_id');
     }
 
-    public function followers()
+    public function followers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'user_follower', 'user_id', 'follower_id');
     }

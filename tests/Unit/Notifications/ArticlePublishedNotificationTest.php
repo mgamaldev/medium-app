@@ -7,15 +7,13 @@ use App\Notifications\ArticlePublishedNotification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Log;
-use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 class ArticlePublishedNotificationTest extends TestCase
 {
     use RefreshDatabase;
 
-    #[Test]
-    public function it_is_sent_via_mail_channel(): void
+    public function test_it_is_sent_via_mail_channel(): void
     {
         $article = Article::factory()->create();
         $notification = new ArticlePublishedNotification($article);
@@ -25,8 +23,7 @@ class ArticlePublishedNotificationTest extends TestCase
         $this->assertEquals(['mail'], $channels);
     }
 
-    #[Test]
-    public function to_mail_returns_correct_message_content(): void
+    public function test_to_mail_returns_correct_message_content(): void
     {
         $article = Article::factory()->create(['title' => 'My Great Article']);
         $notification = new ArticlePublishedNotification($article);
@@ -37,8 +34,7 @@ class ArticlePublishedNotificationTest extends TestCase
         $this->assertStringContainsString('My Great Article', $mailMessage->render());
     }
 
-    #[Test]
-    public function to_array_returns_empty_array(): void
+    public function test_to_array_returns_empty_array(): void
     {
         $article = Article::factory()->create();
         $notification = new ArticlePublishedNotification($article);
@@ -48,8 +44,7 @@ class ArticlePublishedNotificationTest extends TestCase
         $this->assertEquals([], $result);
     }
 
-    #[Test]
-    public function failed_logs_error_with_expected_context(): void
+    public function test_failed_logs_error_with_expected_context(): void
     {
         $article = Article::factory()->create();
         $notification = new ArticlePublishedNotification($article);
