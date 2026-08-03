@@ -2,15 +2,17 @@
 
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\AvatarController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group(function () {
 
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
+    Route::get('/user', fn (Request $request) => $request->user());
+
+    Route::post('users/{user}/follow', [UserController::class, 'store']);
 
     Route::post('avatars/presigned-url', [AvatarController::class, 'getAvatarPreSignedUrl']);
     Route::post('avatars/confirm', [AvatarController::class, 'confirmAvatar']);
@@ -20,6 +22,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/articles/{article}/comments', [CommentController::class, 'store']);
 
     Route::post('articles/covers/presigned-url', [ArticleController::class, 'getPresignedUrl']);
+
+    // Booking System
+    Route::post('/bookings', [BookingController::class, 'store']);
+
 });
 
 Route::get('/articles/trending', [ArticleController::class, 'getTrending']);
