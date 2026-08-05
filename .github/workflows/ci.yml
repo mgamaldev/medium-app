@@ -71,9 +71,11 @@ jobs:
           DB_DATABASE: ":memory:"
         run: php artisan migrate --force
 
-      - name: Run tests
+      - name: Run tests 
+        env:
+          STRIPE_KEY: ${{ secrets.STRIPE_KEY }}
+          STRIPE_SECRET: ${{ secrets.STRIPE_SECRET }}
         run: vendor/bin/phpunit
-
 
 
   k6-smoke-test:
