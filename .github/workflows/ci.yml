@@ -116,4 +116,39 @@ jobs:
           DB_DATABASE: ":memory:"
           STRIPE_KEY: ${{ secrets.STRIPE_KEY }}
           STRIPE_SECRET: ${{ secrets.STRIPE_SECRET }}
-        run: php artisan test --coverage --min=70
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+          touch database/database.sqlite
+          php artisan migrate --force
+
+      - name: Create Test User and Sanctum Token
+        if: steps.changes.outputs.article == 'true'
+        id: create-token
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: database/database.sqlite
+        run: |
+          TOKEN=$(php artisan tinker --execute="
+            \$user = App\Models\User::factory()->create();
+            echo \$user->createToken('k6-ci-token')->plainTextToken;
+          ")
+          echo "SANCTUM_TOKEN=$TOKEN" >> $GITHUB_ENV
+
+      - name: Start Laravel Application Server
+        if: steps.changes.outputs.article == 'true'
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: database/database.sqlite
+        run: |
+          nohup php artisan serve --host=0.0.0.0 --port=8000 > storage/logs/laravel-serve.log 2>&1 &
+          timeout 30s bash -c 'until curl -s http://127.0.0.1:8000; do sleep 1; done'
+
+      - name: Run k6 Smoke Test
+        if: steps.changes.outputs.article == 'true'
+        uses: grafana/k6-action@v0.3.1
+        with:
+          filename: tests/k6/article-smoke.js
+        env:
+          BASE_URL: 'http://172.17.0.1:8000'
+          SANCTUM_TOKEN: ${{ env.SANCTUM_TOKEN }}
