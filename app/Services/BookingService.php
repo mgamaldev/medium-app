@@ -10,8 +10,11 @@ use App\Models\Customer;
 use App\Models\Slot;
 use Illuminate\Contracts\Cache\LockTimeoutException;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Laravel\Cashier\Exceptions\IncompletePayment;
 
 class BookingService
 {
@@ -37,24 +40,21 @@ class BookingService
                     if (! $freshSlot || $freshSlot->status !== SlotStatus::AVAILABLE) {
                         throw new \Exception('Slot is not available');
                     }
-                    $booking = Booking::create([
-                        'slot_id' => $freshSlot->id,
-                        'customer_id' => $customer->id,
-                        'status' => BookingStatus::CONFIRMED,
-                        'idempotency_key' => $idempotencyKey,
+
+                    $freshSlot->update([
+                        'status' => SlotStatus::PENDING,
                     ]);
 
-                    $freshSlot->update(['status' => SlotStatus::BOOKED]);
-
-                    DB::afterCommit(function () use ($booking) {
-                        event(new BookingCreated($booking));
-                    });
-
-                    return $booking;
+                    return Booking::create([
+                        'slot_id' => $freshSlot->id,
+                        'customer_id' => $customer->id,
+                        'status' => BookingStatus::PENDING,
+                        'idempotency_key' => $idempotencyKey,
+                    ]);
                 });
             });
         } catch (LockTimeoutException $e) {
-            throw new \Exception('Excuse for getting the lock, the crowd is very high');
+            throw new \Exception('The slot is currently being booked by another user. Please try again.');
         } catch (QueryException $e) { // @phpstan-ignore-line catch.neverThrown
             $existingBooking = Booking::where('idempotency_key', $idempotencyKey)->first();
 
@@ -62,6 +62,115 @@ class BookingService
                 return $existingBooking;
             }
             throw $e;
+        }
+    }
+
+    public function confirmBooking(Booking $booking, string $paymentMethodId): Booking
+    {
+        $lockKey = "booking:confirm:{$booking->id}";
+
+        return Cache::lock($lockKey, 10)->block(5, function () use ($booking, $paymentMethodId) {
+            $booking->refresh();
+
+            if ($booking->status === BookingStatus::CONFIRMED) {
+                return $booking;
+            }
+
+            if ($booking->status !== BookingStatus::PENDING) {
+                throw new \Exception('This booking is not pending confirmation.');
+            }
+
+            if ($booking->slot->status === SlotStatus::BOOKED) {
+                throw new \Exception('This slot is no longer available.');
+            }
+
+            $amountInCents = (int) round($booking->slot->price * 100);
+            $customer = $booking->customer;
+
+            try {
+                $customer->charge($amountInCents, $paymentMethodId, [
+                    'payment_method_types' => ['card'],
+                ]);
+
+                return DB::transaction(function () use ($booking) {
+                    $booking->update([
+                        'status' => BookingStatus::CONFIRMED,
+                    ]);
+
+                    $booking->slot->update([
+                        'status' => SlotStatus::BOOKED,
+                    ]);
+
+                    DB::afterCommit(function () use ($booking) {
+                        event(new BookingCreated($booking));
+                    });
+
+                    return $booking;
+                });
+            } catch (IncompletePayment $e) {
+                throw $e;
+            } catch (\Exception $exception) {
+                Log::error("Payment failed for booking {$booking->id}: ".$exception->getMessage());
+                throw new \Exception('Payment processing failed. Please check your card details.');
+            }
+        });
+    }
+
+    public function releaseExpiredReservations(?int $ttlMinutes = null): int
+    {
+        $ttlMinutes ??= (int) config('booking.reservation_ttl_minutes', 15);
+        $cutoff = now()->subMinutes($ttlMinutes);
+
+        $expiredBookingIds = Booking::where('status', BookingStatus::PENDING)
+            ->where('created_at', '<', $cutoff)
+            ->pluck('id');
+
+        $releasedCount = 0;
+
+        foreach ($expiredBookingIds as $bookingId) {
+            if ($this->releaseExpiredBooking($bookingId, $cutoff)) {
+                $releasedCount++;
+            }
+        }
+
+        return $releasedCount;
+    }
+
+    private function releaseExpiredBooking(int $bookingId, Carbon $cutoff): bool
+    {
+        $lockKey = "booking:confirm:{$bookingId}";
+        $lock = Cache::lock($lockKey, 20);
+
+        try {
+            return (bool) $lock->block(5, function () use ($bookingId, $cutoff) {
+                $booking = Booking::find($bookingId);
+
+                if (! $booking || $booking->status !== BookingStatus::PENDING) {
+                    return false;
+                }
+
+                if ($booking->created_at->gt($cutoff)) {
+                    return false;
+                }
+
+                return DB::transaction(function () use ($booking) {
+                    $booking->update([
+                        'status' => BookingStatus::CANCELLED,
+                    ]);
+
+                    $slot = $booking->slot;
+
+                    if ($slot->status === SlotStatus::PENDING) {
+                        $slot->update([
+                            'status' => SlotStatus::AVAILABLE,
+                        ]);
+                    }
+
+                    return true;
+                });
+            });
+        } catch (LockTimeoutException $e) {
+            return false;
         }
     }
 }
