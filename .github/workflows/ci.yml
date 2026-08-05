@@ -71,7 +71,46 @@ jobs:
           DB_DATABASE: ":memory:"
         run: php artisan migrate --force
 
-      - name: Run tests with coverage
+      - name: Run tests
+        run: vendor/bin/phpunit
+
+
+
+  k6-smoke-test:
+    name: k6 Article Smoke Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check for Article changes
+        id: changes
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            article:
+              - 'app/Http/Controllers/ArticleController.php'
+              - 'app/Repositories/**'
+              - 'app/Models/Article.php'
+              - 'database/migrations/**'
+              - 'routes/api.php'
+              - '.github/workflows/ci.yml'
+              - 'tests/k6/**'
+
+      - name: Setup PHP
+        if: steps.changes.outputs.article == 'true'
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, pdo, pdo_sqlite, sqlite3
+          coverage: none
+
+      - name: Install Composer Dependencies
+        if: steps.changes.outputs.article == 'true'
+        run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: Prepare Environment File & Database
+        if: steps.changes.outputs.article == 'true'
         env:
           DB_CONNECTION: sqlite
           DB_DATABASE: ":memory:"
