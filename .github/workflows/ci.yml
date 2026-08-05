@@ -69,16 +69,16 @@ jobs:
         env:
           DB_CONNECTION: sqlite
           DB_DATABASE: ":memory:"
-        run: php artisan migrate --force
-
-      - name: Run tests 
-        env:
           STRIPE_KEY: ${{ secrets.STRIPE_KEY }}
           STRIPE_SECRET: ${{ secrets.STRIPE_SECRET }}
+        run: php artisan test --coverage --min=70
+        run: php artisan migrate --force
+
+      - name: Run tests   
         run: vendor/bin/phpunit
 
 
-  k6-smoke-test:
+k6-smoke-test:
     name: k6 Article Smoke Test
     runs-on: ubuntu-latest
     steps:
@@ -115,9 +115,7 @@ jobs:
         if: steps.changes.outputs.article == 'true'
         env:
           DB_CONNECTION: sqlite
-          DB_DATABASE: ":memory:"
-          STRIPE_KEY: ${{ secrets.STRIPE_KEY }}
-          STRIPE_SECRET: ${{ secrets.STRIPE_SECRET }}
+          DB_DATABASE: database/database.sqlite
         run: |
           cp .env.example .env
           php artisan key:generate
@@ -151,7 +149,6 @@ jobs:
         uses: grafana/k6-action@v0.3.1
         with:
           filename: tests/k6/article-smoke.js
-          flags: --network host
         env:
           BASE_URL: 'http://172.17.0.1:8000'
           SANCTUM_TOKEN: ${{ env.SANCTUM_TOKEN }}
