@@ -15,10 +15,6 @@ class BookingControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * The endpoint under test.
-     * ASSUMPTION: route is POST /api/bookings. Update if your actual route differs.
-     */
     private string $endpoint = '/api/bookings';
 
     private function makeUserWithCustomer(): User
@@ -35,6 +31,7 @@ class BookingControllerTest extends TestCase
             'status' => SlotStatus::AVAILABLE,
             'starts_at' => now()->addDay(),
             'ends_at' => now()->addDay()->addHour(),
+            'price' => 25.00,
         ]);
     }
 
@@ -55,6 +52,23 @@ class BookingControllerTest extends TestCase
         $this->assertDatabaseHas('bookings', [
             'slot_id' => $slot->id,
             'idempotency_key' => 'key-123',
+            'status' => BookingStatus::PENDING->value,
+        ]);
+    }
+
+    public function test_it_reserves_the_slot_as_pending_after_booking(): void
+    {
+        $user = $this->makeUserWithCustomer();
+        $slot = $this->makeAvailableSlot();
+
+        $this->actingAs($user)
+            ->postJson($this->endpoint, ['slot_id' => $slot->id], [
+                'Idempotency-Key' => 'key-123',
+            ]);
+
+        $this->assertDatabaseHas('slots', [
+            'id' => $slot->id,
+            'status' => SlotStatus::PENDING->value,
         ]);
     }
 
@@ -133,6 +147,28 @@ class BookingControllerTest extends TestCase
             'status' => SlotStatus::BOOKED,
             'starts_at' => now()->addDay(),
             'ends_at' => now()->addDay()->addHour(),
+            'price' => 25.00,
+        ]);
+
+        $response = $this->actingAs($user)
+            ->postJson($this->endpoint, ['slot_id' => $slot->id], [
+                'Idempotency-Key' => 'key-123',
+            ]);
+
+        $response->assertStatus(422)
+            ->assertJsonPath('message', 'Slot is not available');
+
+        $this->assertDatabaseCount('bookings', 0);
+    }
+
+    public function test_it_returns_422_when_slot_is_already_reserved_pending(): void
+    {
+        $user = $this->makeUserWithCustomer();
+        $slot = Slot::factory()->create([
+            'status' => SlotStatus::PENDING,
+            'starts_at' => now()->addDay(),
+            'ends_at' => now()->addDay()->addHour(),
+            'price' => 25.00,
         ]);
 
         $response = $this->actingAs($user)
@@ -152,8 +188,6 @@ class BookingControllerTest extends TestCase
         $customer = $user->customer;
         $slot = $this->makeAvailableSlot();
 
-        // NOTE: Booking model does not use the HasFactory trait, so it has
-        // no Booking::factory(). Creating it directly instead.
         $existingBooking = Booking::create([
             'slot_id' => $slot->id,
             'customer_id' => $customer->id,

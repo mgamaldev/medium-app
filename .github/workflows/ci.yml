@@ -69,14 +69,16 @@ jobs:
         env:
           DB_CONNECTION: sqlite
           DB_DATABASE: ":memory:"
+          STRIPE_KEY: ${{ secrets.STRIPE_KEY }}
+          STRIPE_SECRET: ${{ secrets.STRIPE_SECRET }}
+        run: php artisan test --coverage --min=70
         run: php artisan migrate --force
 
-      - name: Run tests
+      - name: Run tests   
         run: vendor/bin/phpunit
 
 
-
-  k6-smoke-test:
+k6-smoke-test:
     name: k6 Article Smoke Test
     runs-on: ubuntu-latest
     steps:

@@ -27,6 +27,7 @@ class SlotFactory extends Factory
             'starts_at' => $startTime,
             'ends_at' => (clone $startTime)->addHours(1),
             'status' => SlotStatus::AVAILABLE,
+            'price' => $this->faker->randomFloat(2, 20, 500),
         ];
     }
 }

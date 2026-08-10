@@ -18,3 +18,5 @@ Schedule::job(CalculateTrendingArticlesJob::class)->dailyAt('02:00')->withoutOve
 Schedule::job(PruneStaleDraftsJob::class)->weeklyOn(7, '03:30')->withoutOverlapping();
 
 Schedule::job(new PruneOrphanedImagesJob(24))->daily();
+
+Schedule::command('bookings:release-expired')->everyMinute()->withoutOverlapping();

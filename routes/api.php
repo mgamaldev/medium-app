@@ -25,6 +25,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Booking System
     Route::post('/bookings', [BookingController::class, 'store']);
+    Route::get('/bookings', [BookingController::class, 'index'])->name('bookings.index');
+    Route::patch('/bookings/{booking}/confirm', [BookingController::class, 'confirm']);
+    Route::patch('/bookings/{booking}/reject', [BookingController::class, 'reject']);
 
 });
 

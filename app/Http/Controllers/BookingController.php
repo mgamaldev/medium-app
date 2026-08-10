@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ConfirmBookingRequest;
 use App\Http\Requests\StoreBookingRequest;
+use App\Models\Booking;
 use App\Models\Customer;
 use App\Models\Slot;
 use App\Models\User;
 use App\Services\BookingService;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Laravel\Cashier\Exceptions\IncompletePayment;
 
 class BookingController extends Controller
 {
@@ -49,6 +52,38 @@ class BookingController extends Controller
             return response()->json([
                 'message' => $e->getMessage(),
             ], 422);
+        }
+    }
+
+    public function confirm(ConfirmBookingRequest $request, Booking $booking)
+    {
+        /** @var User $user */
+        $user = $request->user();
+        if ($booking->customer_id !== $user->customer?->id) {
+            return response()->json([
+                'message' => 'You are not authorized to confirm this booking.',
+            ], 403);
+        }
+
+        try {
+            $confirmedBooking = $this->bookingService->confirmBooking(
+                $booking,
+                $request->validated('payment_method_id')
+            );
+
+            return response()->json([
+                'message' => 'Booking confirmed successfully!',
+                'booking' => $confirmedBooking,
+            ]);
+        } catch (IncompletePayment $exception) {
+            $paymentIntent = $exception->payment->asStripePaymentIntent();
+
+            return response()->json([
+                'requires_action' => true,
+                'payment_intent' => $paymentIntent,
+                /** @phpstan-ignore-next-line */
+                'redirect_url' => route('cashier.payment', [$exception->payment->id, 'redirect' => route('bookings.index')]),
+            ], 402);
         }
     }
 }
