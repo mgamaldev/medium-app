@@ -216,4 +216,31 @@ class BookingControllerTest extends TestCase
 
         $response->assertStatus(401);
     }
+
+    public function test_it_allows_rebooking_the_same_slot_after_cancellation(): void
+    {
+        $user = $this->makeUserWithCustomer();
+        $customer = $user->customer;
+        $slot = $this->makeAvailableSlot();
+
+        Booking::create([
+            'slot_id' => $slot->id,
+            'customer_id' => $customer->id,
+            'status' => BookingStatus::CANCELLED,
+            'idempotency_key' => 'old-cancelled-key',
+        ]);
+
+        $newUser = $this->makeUserWithCustomer();
+
+        $response = $this->actingAs($newUser)
+            ->postJson($this->endpoint, ['slot_id' => $slot->id], [
+                'Idempotency-Key' => 'new-fresh-key',
+            ]);
+
+        $response->assertStatus(201)
+            ->assertJsonPath('message', 'Booking created successfully')
+            ->assertJsonPath('data.slot_id', $slot->id);
+
+        $this->assertDatabaseCount('bookings', 2);
+    }
 }

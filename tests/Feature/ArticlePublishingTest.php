@@ -1,13 +1,12 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Feature;
 
 use App\Enums\ArticleStatus;
+use App\Events\ArticlePublished;
 use App\Models\Article;
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Mail\Mailable;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class ArticlePublishingTest extends TestCase
@@ -53,25 +52,17 @@ class ArticlePublishingTest extends TestCase
         $article->publish();
     }
 
-    // public function test_publishing_an_article_triggers_email_notification(): void
-    // {
-    //     Mail::fake();
+    public function test_publishing_an_article_dispatches_published_event(): void
+    {
+        Event::fake();
 
-    //     $author = User::factory()->create();
-    //     $follower = User::factory()->create();
+        $article = Article::factory()->create([
+            'body' => 'This is a test article',
+            'status' => ArticleStatus::DRAFT,
+        ]);
 
-    //     $follower->follow($author);
+        $article->publish();
 
-    //     $article = Article::factory()->create([
-    //         'user_id' => $author->id,
-    //         'body' => 'This is a test article',
-    //         'status' => ArticleStatus::DRAFT,
-    //     ]);
-
-    //     $article->publish();
-
-    //     Mail::assertSent(function (Mailable $mailable) use ($follower) {
-    //         return $mailable->hasTo($follower->email);
-    //     });
-    // }
+        Event::assertDispatched(ArticlePublished::class, fn ($e) => $e->article->is($article));
+    }
 }
