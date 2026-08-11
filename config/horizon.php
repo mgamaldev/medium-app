@@ -216,21 +216,21 @@ return [
         'production' => [
             'supervisor-notifications' => [
                 'connection' => 'redis',
-                'queue' => ['default'],
+                'queue' => ['notifications'],
                 'balance' => 'auto',
                 'processes' => 5,
                 'tries' => 1,
             ],
             'supervisor-indexing' => [
                 'connection' => 'redis',
-                'queue' => ['default'],
+                'queue' => ['indexing'],
                 'balance' => 'auto',
                 'processes' => 3,
                 'tries' => 1,
             ],
             'supervisor-digest' => [
                 'connection' => 'redis',
-                'queue' => ['default'],
+                'queue' => ['digest'],
                 'balance' => 'auto',
                 'processes' => 2,
                 'tries' => 1,

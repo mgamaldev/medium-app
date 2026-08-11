@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AvatarController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CommentController;
@@ -8,8 +9,15 @@ use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+// Auth Routes
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+
+Route::get('/articles/trending', [ArticleController::class, 'getTrending']);
+
 Route::middleware('auth:sanctum')->group(function () {
 
+    Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', fn (Request $request) => $request->user());
 
     Route::post('users/{user}/follow', [UserController::class, 'store']);
@@ -28,10 +36,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/bookings', [BookingController::class, 'index'])->name('bookings.index');
     Route::patch('/bookings/{booking}/confirm', [BookingController::class, 'confirm']);
     Route::patch('/bookings/{booking}/reject', [BookingController::class, 'reject']);
-
 });
-
-Route::get('/articles/trending', [ArticleController::class, 'getTrending']);
 
 Route::post('/articles/{article}/publish', [ArticleController::class, 'publish']);
 
