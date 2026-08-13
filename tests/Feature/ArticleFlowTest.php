@@ -148,4 +148,59 @@ class ArticleFlowTest extends TestCase
             'status' => ArticleStatus::DRAFT,
         ]);
     }
+
+    #[Test]
+    public function it_can_complete_end_to_end_article_publish_flow(): void
+    {
+        Notification::fake();
+
+        // 1. Register User (Author)
+        $registerPayload = [
+            'username' => 'Author E2E',
+            'email' => 'author@example.com',
+            'password' => 'secret123',
+        ];
+
+        $registerResponse = $this->postJson('/api/register', $registerPayload);
+        $registerResponse->assertStatus(201);
+        $token = $registerResponse->json('access_token');
+
+        $author = User::where('email', 'author@example.com')->first();
+        $follower = User::factory()->create();
+        $author->followers()->attach($follower); // Add follower manually for assertion
+
+        // 2. Create Article
+        $articlePayload = [
+            'title' => 'E2E Article Title',
+            'body' => 'E2E Article Body content goes here.',
+            'status' => ArticleStatus::DRAFT->value,
+            'cover_image' => 'covers/test.jpg',
+        ];
+
+        $createResponse = $this->withToken($token)->postJson('/api/articles', $articlePayload);
+        $createResponse->assertStatus(201);
+
+        $articleId = $createResponse->json('id');
+
+        $this->assertDatabaseHas('articles', [
+            'id' => $articleId,
+            'title' => 'E2E Article Title',
+            'status' => ArticleStatus::DRAFT->value,
+            'user_id' => $author->id,
+        ]);
+
+        // 3. Publish Article
+        $publishResponse = $this->withToken($token)->postJson("/api/articles/{$articleId}/publish");
+        $publishResponse->assertStatus(200);
+
+        // Assert Real Outcomes
+        $this->assertDatabaseHas('articles', [
+            'id' => $articleId,
+            'status' => ArticleStatus::PUBLISHED->value,
+        ]);
+
+        Notification::assertSentTo($follower, ArticlePublishedNotification::class, function ($notification) use ($articleId) {
+            return $notification->article->id === $articleId;
+        });
+    }
 }

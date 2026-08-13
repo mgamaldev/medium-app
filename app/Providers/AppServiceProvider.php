@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Events\ArticlePublished;
+use App\Events\BookingCreated;
 use App\Listeners\ClearArticleCache;
 use App\Listeners\SendAuthorNotification;
+use App\Listeners\SendBookingNotification;
 use App\Models\Article;
 use App\Observers\ArticleObserver;
 use App\Policies\ArticlePolicy;
@@ -37,6 +39,11 @@ class AppServiceProvider extends ServiceProvider
         Event::listen(
             ArticlePublished::class,
             ClearArticleCache::class
+        );
+
+        Event::listen(
+            BookingCreated::class,
+            SendBookingNotification::class
         );
 
         Gate::policy(Article::class, ArticlePolicy::class);

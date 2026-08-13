@@ -53,6 +53,7 @@ class BookingController extends Controller
                 'message' => $e->getMessage(),
             ], 422);
         }
+
     }
 
     public function confirm(ConfirmBookingRequest $request, Booking $booking)
