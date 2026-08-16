@@ -37,6 +37,7 @@ A PR should only be opened once all three of these pass locally:
 - [ ] `vendor/bin/pint --test` — no style violations
 - [ ] `vendor/bin/phpstan analyse` — no static analysis errors
 - [ ] `php artisan test` — full test suite passes
+- [ ] Updated `CHANGELOG.md` under the `[Unreleased]` section with user-facing changes.
 
 This mirrors exactly what CI runs, so a clean local run means there are no
 surprises after you push.
