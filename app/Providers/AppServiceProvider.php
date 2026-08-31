@@ -12,8 +12,10 @@ use App\Observers\ArticleObserver;
 use App\Policies\ArticlePolicy;
 use App\Repositories\Contracts\ArticleRepositoryInterface;
 use App\Repositories\EloquentArticleRepository;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -31,6 +33,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        DB::listen(function ($query) {
+            Log::info($query->sql, [
+                'bindings' => $query->bindings,
+                'time' => $query->time.'ms',
+            ]);
+        });
         Event::listen(
             ArticlePublished::class,
             SendAuthorNotification::class
@@ -48,6 +56,5 @@ class AppServiceProvider extends ServiceProvider
 
         Gate::policy(Article::class, ArticlePolicy::class);
         Article::observe(ArticleObserver::class);
-
     }
 }
